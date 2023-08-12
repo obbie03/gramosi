@@ -1,0 +1,41 @@
+<div class="w-full">
+    <div class="flex w-full items-center justify-between border-b pb-4">
+        <div class="flex flex-col">
+            <h4 class="text-[20px] text-slate-800 font-bold">General Ledger</h4>
+        </div>
+        <div class="flex items-center justify-end">
+            <label for="from" class="text-[13px] text-slate-600 mr-2">From</label>
+            <input type="date" id="from"
+                class="w-[220px] border rounded-md  text-slate-700 px-3 h-[40px] outline-none text-[12px]"
+                placeholder="From">
+            <label class="text-[12px] text-slate-600 mx-2">To</label>
+            <input type="date"
+                class="w-[220px] rounded-md mr-2 text-slate-700 border px-2 h-[40px] outline-none text-[12px]"
+                placeholder="To">
+            <div class="search flex items-center justify-center border rounded-md px-3 overflow-hidden">
+                <input type="text" class="text-center w-[220px] h-[40px] outline-none text-[12px]"
+                    placeholder="Search Customer">
+                <i class="fa fa-search text-slate-400" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div>
+    <!-- gl table -->
+    <div class="w-full gl-table table mt-5 text-[13px] bg-slate-50 rounded-b-md" title="General Ledger">
+        <div
+            class="w-full table-head tr grid grid-cols-17 h-[40px] bg-default text-white rounded-t-md overflow-hidden text-[13px] gap-x-4 font-semibold">
+            <div col="S/N" class="th flex items-center h-full w-full col-span-1 border-r pl-3">S/N</div>
+            <div col="Posting Date" class="th flex items-center h-full w-full col-span-2  border-r ">Posting Date</div>
+            <div col="Voucher" class="th flex items-center h-full w-full col-span-2  border-r">Voucher</div>
+            <div col="Debit" class="th flex items-center h-full w-full col-span-2  border-r">Debit</div>
+            <div col="Credit" class="th flex items-center h-full w-full col-span-2  border-r">Credit</div>
+            <div col="Balance" class="th flex items-center h-full w-full col-span-2  border-r">Balance</div>
+            <div col="Account" class="th flex items-center h-full w-full col-span-2  border-r">COA</div>
+            <div col="Customer" class="th flex items-center h-full w-full col-span-2  border-r">Customer</div>
+            <div col="Remarks" class="th flex items-center h-full w-full col-span-2  border-r">Remarks</div>
+        </div>
+        <div
+            class="gl-body t-body bills_rows w-full mt-1 max-h-[400px] pb-3 overflow-hidden overflow-y-auto text-[12px]">
+        </div>
+    </div>
+    <!-- gl table -->
+</div>

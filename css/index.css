@@ -1,0 +1,114 @@
+:root {
+    --gray: #eeeeee;
+    --default: #151030;
+}
+
+.wrapper {
+    min-height: 100vh;
+}
+
+.nav-menus a .text-wrapper {
+    transition: .5s;
+}
+
+.nav-menus a i {
+    transition: .8s;
+}
+
+.nav-menus a:hover .text-wrapper {
+    transform: translateX(-2%);
+}
+
+.nav-menus a:hover i {
+    transform: translateY(-10%);
+}
+
+.nav-menus a.active {
+    background-color: var(--gray);
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    color: var(--default);
+}
+
+.nav-menus a.active .active-top {
+    position: absolute;
+    top: -20px;
+    width: 20px;
+    height: 30px;
+    background-color: var(--gray);
+    right: 0;
+}
+
+.nav-menus a.active .active-top::before {
+    content: '';
+    position: absolute;
+    top: 0px;
+    width: 20px;
+    height: 20px;
+    background-color: var(--default);
+    right: 0;
+    border-bottom-right-radius: 20px;
+}
+
+.nav-menus a.active .active-bottom {
+    position: absolute;
+    bottom: -20px;
+    width: 20px;
+    height: 30px;
+    background-color: var(--gray);
+    right: 0;
+}
+
+.nav-menus a.active .active-bottom::before {
+    content: '';
+    position: absolute;
+    bottom: 0px;
+    width: 20px;
+    height: 20px;
+    background-color: var(--default);
+    right: 0;
+    border-top-right-radius: 20px;
+}
+
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+}
+
+/* report */
+.report-menu.active {
+    color: #8911d4;
+    font-weight: bolder;
+    border-bottom: 2px #8911d4 solid;
+    padding-bottom: 5px;
+}
+
+#custNameDiv{
+    position: relative;
+    width:100%;
+}
+
+.custNameResp{
+    position: absolute;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    width:100%;
+    text-align: center;
+    padding:10px;
+    display: none;
+}
+
+#alert{
+    position:fixed;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius:10px;
+    width: 50%;
+    top:50px;
+    margin-left:25%;
+    z-index:1000000;
+    padding:10px;
+    display:none;
+    text-align: center;
+    font-weight: 1000;
+}

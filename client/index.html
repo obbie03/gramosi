@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Council</title>
+    <link rel="stylesheet" href="../css/index.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/64d58efce2.js"></script>
+</head>
+
+<body>
+    <div id="alert"></div>
+    <div class="wrapper w-100 bg-default grid grid-cols-6">
+        <!-- navigation menus -->
+        <div class="col-span-1 w-full text-white mt-5 flex items-center justify-start flex-col">
+            <div class="w-[80%] flex items-center justify-start border-b border-b-1 pb-5">
+                <img src="../img/logo.png" alt="" class="w-[70px] h-[70px] object-contain mr-2">
+                <h1 class="font-bold text-[23px]">Gramosic</h1>
+            </div>
+            <div class="w-[100%] nav-menus flex items-center justify-start flex-col mt-5 text-[14px]">
+                <a href="./dashboard.html"
+                    class="cursor-pointer nav-menu-link w-full hover:bg-defaulthover flex items-center justify-center h-[60px] relative active">
+                    <div class="active-top"></div>
+                    <div class="active-bottom"></div>
+                    <div class="w-[80%] nav-menu flex items-center justify-start text-wrapper h-full">
+                        <i class="fa fa-tachometer mr-2" aria-hidden="true"></i>
+                        Dashboard
+                    </div>
+                </a>
+                <a href="./bills.html"
+                    class="cursor-pointer nav-menu-link bills w-full hover:bg-defaulthover flex items-center justify-center h-[60px] relative">
+                    <div class="active-top"></div>
+                    <div class="active-bottom"></div>
+                    <div class="w-[80%] nav-menu flex items-center justify-start text-wrapper h-full">
+                        <i class="fa fa-bar-chart mr-2" aria-hidden="true"></i>
+                        Bills
+                    </div>
+                </a>
+                <a href="receipts.html"
+                    class="cursor-pointer nav-menu-link receipts w-full hover:bg-defaulthover flex items-center justify-center h-[60px] relative">
+                    <div class="active-top"></div>
+                    <div class="active-bottom"></div>
+                    <div class="w-[80%] nav-menu flex items-center justify-start text-wrapper h-full">
+                        <i class="fa fa-file-text mr-2" aria-hidden="true"></i>
+                        Payment Receipts
+                    </div>
+                </a>
+                <a href=""
+                    class="cursor-pointer nav-menu-link w-full hover:bg-defaulthover flex items-center justify-center h-[60px] relative">
+                    <div class="active-top"></div>
+                    <div class="active-bottom"></div>
+                    <div class="w-[80%] nav-menu flex items-center justify-start text-wrapper h-full">
+                        <i class="fa fa-bookmark mr-2" aria-hidden="true"></i>
+                        Land Management
+                    </div>
+                </a>
+                <a href="./reports/wrapper.html"
+                    class="cursor-pointer nav-menu-link w-full hover:bg-defaulthover flex items-center justify-center h-[60px] relative">
+                    <div class="active-top"></div>
+                    <div class="active-bottom"></div>
+                    <div class="w-[80%] nav-menu flex items-center justify-start text-wrapper h-full">
+                        <i class="fa fa-files-o mr-2" aria-hidden="true"></i>
+                        Reports
+                    </div>
+                </a>
+                <a href=""
+                    class="cursor-pointer nav-menu-link w-full hover:bg-defaulthover flex items-center justify-center h-[60px] relative">
+                    <div class="active-top"></div>
+                    <div class="active-bottom"></div>
+                    <div class="w-[80%] nav-menu flex items-center justify-start text-wrapper h-full">
+                        <i class="fa fa-user-circle-o mr-2" aria-hidden="true"></i>
+                        Account
+                    </div>
+                </a>
+
+            </div>
+        </div>
+        <!-- dashboard content -->
+        <div
+            class="w-full h-[100vh] bg-lightgray col-span-5 rounded-l-[20px] flex items-center justify-start flex-col p-5  px-10 overflow-y-auto relative">
+            <!-- tab content -->
+            <div
+                class="bg-white shadow-lighters rounded-md mb-5 mt-5 w-full flex items-center justify-between h-[90px]">
+                <div class="flex items-center ustify-start px-3">
+                    <!-- menu controller -->
+                    <button class="nav-controller flex items-start justify-center flex-col">
+                        <span class="mb-2 w-[60px] h-[5px] rounded-full bg-default"></span>
+                        <span class="mb-2 w-[45px] h-[5px] rounded-full bg-default"></span>
+                        <span class="mb-2 w-[30px] h-[5px] rounded-full bg-default"></span>
+                    </button>
+                    <!-- menu controller -->
+                    <span class="flex items-center justify-start text-[14px] text-slate-700 ml-3">
+                        Dashboard
+                        <span class="text-red-500 font-semibold mx-1">/</span>
+                        Content
+                    </span>
+                </div>
+                <div class="flex items-center justify-end mr-4">
+                    <div class="dp flex items-center items-center shadow-lighter rounded-full w-[50px] h-[50px] mr-2">
+                        <img src="../img/avata1.webp" alt="" class="rounded-full w-full h-full object-cover">
+                    </div>
+                    <span class="text-[13px]">user.mail@example.com</span>
+                </div>
+            </div>
+            <!-- tab content -->
+            <div class="inner-content w-full h-[100vh]"></div>
+            <div class="copy fixed bottom-4 left-200 bg-default text-white py-1 px-3 rounded-full text-[12px]">
+                &copy; 2023 | All rights reserved.
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../js/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+<script src="../js/client.js"></script>
+
+</html>

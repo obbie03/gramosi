@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication</title>
+    <link rel="stylesheet" href="../css/auth.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/64d58efce2.js"></script>
+</head>
+
+<body>
+    <div class="w-full h-screen bg-default flex items-center justify-center">
+        <form
+            class="w-[500px] h-[600px] flex items-center justify-center flex-col bg-lightgray rounded-lg p-10 text-slate-700">
+            <img src="../img/logo.png" class="w-[130px] object-contain" alt="">
+            <h3 class="text-[30px] font-bold">Authenticate</h3>
+            <small class="my-5 w-full">Provide your login credentials to get signed into the system</small>
+            <div class="w-full text-[13px] mb-3">Email Address</div>
+            <input type="email" name="" id=""
+                class="w-full h-[50px] h-10 px-3 bg-white rounded-md text-[13px]  border border-slate-300"
+                placeholder="Enter your Email" required>
+            <div class="w-full text-[13px] my-3">Password</div>
+            <input type="password" name="" id=""
+                class="w-full h-[50px] h-10 px-3 bg-white rounded-md text-[13px] border border-slate-300"
+                placeholder="Enter your password" required>
+            <button
+                class="flex items-center justify-center w-full h-[50px] bg-default rounded-md text-white mt-7 font-bold">Login</button>
+            <div class="w-full flex items-center justify-between mt-7 text-[13px]">
+                <div class="flex items-center justify-start">
+                    <input type="checkbox" class="w-[20px] h-[20px] mr-2" name="" id="">
+                    <span>Remeber Me</span>
+                </div>
+                <a href="#" class="text-slate-700">Forgot Password?</a>
+            </div>
+        </form>
+        <div class="absolute bottom-3 text-[12px] text-white">&copy; 2023 | All Rights Reserved</div>
+    </div>
+</body>
+<script src="../js/jquery.js"></script>
+<script src="../js/client.js"></script>
+
+</html>

@@ -1,0 +1,111 @@
+<div class="w-full flex items-center justify-start flex-col">
+    <div class="w-full mt-5">
+        <div class="w-full col-span-3 h-[30px] mb-2 text-[12px] text-slate-700">Summary Info</div>
+        <div class="w-full grid grid-cols-3 gap-x-6 min-h-[150px]">
+
+            <div
+                class="card w-full h-full rounded-md shadow-lighter bg-white flex flex-col items-center justify-between p-5">
+                <div class="w-full flex items-center justify-between">
+                    <div class="flex items-center justify-start">
+                        <div class="w-[40px] h-[40px] bg-indigo-300 rounded-lg mr-2 flex items-center justify-center">
+                            <i class="fa fa-bar-chart text-[25px] " aria-hidden="true"></i>
+                        </div>
+                        <span>Total Unpaid Bills</span>
+                    </div>
+                    <h1 class="font-bold text-indigo-800 overrall-outstanding-count">0</h1>
+                </div>
+                <div
+                    class="w-full flex items-center justify-center text-[20px] text-slate-700 font-bold overrall-outstanding-total">
+                    ZMW 0.00
+                </div>
+                <span class="text-slate-600 text-[12px]"> <i class="fa fa-clock-o text-red-600 mr-1"
+                        aria-hidden="true"></i>
+                    <span class="as-at"></span>
+                </span>
+            </div>
+            <div
+                class="card w-full h-full rounded-md shadow-lighter bg-white flex flex-col items-center justify-between p-5">
+                <div class="w-full flex items-center justify-between">
+                    <div class="flex items-center justify-start">
+                        <div class="w-[40px] h-[40px] bg-indigo-300 rounded-lg mr-2 flex items-center justify-center">
+                            <i class="fa fa-credit-card-alt text-[24px]" aria-hidden="true"></i>
+                        </div>
+                        <span>Total Receipted Bills</span>
+                    </div>
+                    <h1 class="font-bold text-emerald-800 receipt-count">0</h1>
+                </div>
+                <div class="w-full flex items-center justify-center text-[20px] text-slate-700 font-bold receipt-total">
+                    ZMW 0.00
+                </div>
+                <span class="text-slate-600 text-[12px]"> <i class="fa fa-clock-o text-red-600 mr-1"
+                        aria-hidden="true"></i>
+                    <span class="as-at"></span>
+                </span>
+            </div>
+            <div
+                class="card w-full h-full rounded-md shadow-lighter bg-white flex flex-col items-center justify-between p-5">
+                <div class="w-full flex items-center justify-between">
+                    <div class="flex items-center justify-start">
+                        <div class="w-[40px] h-[40px] bg-indigo-300 rounded-lg mr-2 flex items-center justify-center">
+                            <i class="fa fa-area-chart text-[30px]" aria-hidden="true"></i>
+                        </div>
+                        <span>Total Linked Properties</span>
+                    </div>
+                    <h1 class="font-bold text-blue-800">0</h1>
+                </div>
+                <div class="w-full flex items-center justify-center text-[20px] text-slate-700 font-bold">
+                    0
+                </div>
+                <span class="text-slate-600 text-[12px]"> <i class="fa fa-clock-o text-red-600 mr-1"
+                        aria-hidden="true"></i>
+                    <span class="as-at"></span>
+                </span>
+            </div>
+
+        </div>
+    </div>
+    <div class="w-full mt-3">
+        <div class="w-full col-span-3 h-[30px] mb-2 text-[12px] text-slate-700">Other Info</div>
+        <div class="w-full grid grid-cols-2 gap-x-4 min-h-[400px]">
+            <div class="card w-full h-full rounded-md shadow-lighter bg-white p-5">
+                <div class="w-full flex items-center justify-between text-[13px]">
+                    <span class="text-slate-600">Recent Outstanding Bills</span>
+                    <a href="" class="text-indigo-800 view-all-bills">View All <i class="fa fa-long-arrow-right ml-2"
+                            aria-hidden="true"></i></a>
+                </div>
+                <div class="w-full table bg-slate-50 mt-2 pb-5 rounded-md px-2">
+                    <div
+                        class="w-full tr bg-slate-200 rounded-t-md mt-5 h-[50px] grid grid-cols-9 text-[13px] text-slate-700">
+                        <div class="th w-full h-full flex items-center justify-center col-span-1">SN</div>
+                        <div class="th w-full h-full flex items-center col-span-2">Bill No</div>
+                        <div class="th w-full h-full flex items-center col-span-2">Outstanding</div>
+                        <div class="th w-full h-full flex items-center col-span-2">Due Date</div>
+                        <div class="th w-full h-full flex items-center col-span-2">Pay</div>
+                    </div>
+                    <div class="tbody w-full outstanding-body">
+                        <h4 class="w-full font-bold h-[300px] text-slate-400 flex items-center justify-center">No
+                            Records Found</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="card w-full h-full rounded-md shadow-lighter bg-white p-5">
+                <div class="w-full flex items-center justify-between text-[13px]">
+                    <span class="text-slate-600">Recent Receipted</span>
+                    <a href="" class="text-indigo-800 view-all-receipts">View All <i class="fa fa-long-arrow-right ml-2"
+                            aria-hidden="true"></i></a>
+                </div>
+                <div class="w-full table bg-slate-50 mt-2 pb-5 rounded-md px-2">
+                    <div
+                        class="w-full tr bg-slate-200 rounded-t-md mt-5 h-[50px] grid grid-cols-9 text-[13px] text-slate-700">
+                        <div class="th w-full h-full flex items-center justify-center col-span-1">SN</div>
+                        <div class="th w-full h-full flex items-center col-span-2">Bill No</div>
+                        <div class="th w-full h-full flex items-center col-span-2">Paid Amount</div>
+                        <div class="th w-full h-full flex items-center col-span-2">Due Date</div>
+                        <div class="th w-full h-full flex items-center col-span-2">Print Receipt</div>
+                    </div>
+                    <div class="tbody w-full receipts-body"> </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

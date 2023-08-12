@@ -1,0 +1,422 @@
+[
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 4566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0001",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2010",
+        "account": "Stanbic",
+        "debit": 0,
+        "credit": 7566.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0002",
+        "customer": "Obbie Chinyere",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 4566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0003",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 0,
+        "credit": 4566.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0001",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2010",
+        "account": "Stanbic",
+        "debit": 7566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0002",
+        "customer": "Obbie Chinyere",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 988.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0003",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 0.00,
+        "credit": 25000.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0001",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2010",
+        "account": "Stanbic",
+        "debit": 7566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0002",
+        "customer": "Obbie Chinyere",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 4566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0003",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 0.00,
+        "credit": 18000.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0001",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2010",
+        "account": "Stanbic",
+        "debit": 40566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0002",
+        "customer": "Obbie Chinyere",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 0.00,
+        "credit": 10000.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0003",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 4566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0001",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2010",
+        "account": "Stanbic",
+        "debit": 7566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0002",
+        "customer": "Obbie Chinyere",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 4566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0003",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 4566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0001",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2010",
+        "account": "Stanbic",
+        "debit": 22.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0002",
+        "customer": "Obbie Chinyere",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 0.00,
+        "credit": 57122.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0003",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 45266.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0001",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2010",
+        "account": "Stanbic",
+        "debit": 7566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0002",
+        "customer": "Obbie Chinyere",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 4566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0003",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 4566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0001",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2010",
+        "account": "Stanbic",
+        "debit": 7566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0002",
+        "customer": "Obbie Chinyere",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 4566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0003",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 4566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0001",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2010",
+        "account": "Stanbic",
+        "debit": 7566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0002",
+        "customer": "Obbie Chinyere",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 4566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0003",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 0.00,
+        "credit": 34677.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0001",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2010",
+        "account": "Stanbic",
+        "debit": 7566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0002",
+        "customer": "Obbie Chinyere",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 4566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0003",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 4566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0001",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2010",
+        "account": "Stanbic",
+        "debit": 7566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0002",
+        "customer": "Obbie Chinyere",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 4566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0003",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 4566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0001",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2010",
+        "account": "Stanbic",
+        "debit": 7566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0002",
+        "customer": "Obbie Chinyere",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 4566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0003",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 4566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0001",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2010",
+        "account": "Stanbic",
+        "debit": 7566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0002",
+        "customer": "Obbie Chinyere",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 4566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0003",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 4566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0001",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2010",
+        "account": "Stanbic",
+        "debit": 7566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0002",
+        "customer": "Obbie Chinyere",
+        "remark": "Bill Issurance"
+    },
+    {
+        "date": "27th Jan, 2003",
+        "account": "ZANACO",
+        "debit": 4566.00,
+        "credit": 0.00,
+        "balance": 0.00,
+        "voucher": "ACC-BILL-0003",
+        "customer": "Bruce Chikola",
+        "remark": "Bill Issurance"
+    }
+]
