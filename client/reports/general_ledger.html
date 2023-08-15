@@ -6,15 +6,16 @@
         <div class="flex items-center justify-end">
             <label for="from" class="text-[13px] text-slate-600 mr-2">From</label>
             <input type="date" id="from"
-                class="w-[220px] border rounded-md  text-slate-700 px-3 h-[40px] outline-none text-[12px]"
+                class="w-[220px] from-date border rounded-md  text-slate-700 px-3 h-[40px] outline-none text-[12px]"
                 placeholder="From">
             <label class="text-[12px] text-slate-600 mx-2">To</label>
             <input type="date"
-                class="w-[220px] rounded-md mr-2 text-slate-700 border px-2 h-[40px] outline-none text-[12px]"
+                class="w-[220px] to-date rounded-md mr-2 text-slate-700 border px-2 h-[40px] outline-none text-[12px]"
                 placeholder="To">
+            
             <div class="search flex items-center justify-center border rounded-md px-3 overflow-hidden">
-                <input type="text" class="text-center w-[220px] h-[40px] outline-none text-[12px]"
-                    placeholder="Search Customer">
+                <input type="text" class="search-field text-center w-[220px] h-[40px] outline-none text-[12px]"
+                    placeholder="Search Content">
                 <i class="fa fa-search text-slate-400" aria-hidden="true"></i>
             </div>
         </div>
@@ -34,7 +35,7 @@
             <div col="Remarks" class="th flex items-center h-full w-full col-span-2  border-r">Remarks</div>
         </div>
         <div
-            class="gl-body t-body bills_rows w-full mt-1 max-h-[400px] pb-3 overflow-hidden overflow-y-auto text-[12px]">
+            class="gl-body tbody bills_rows w-full mt-1 max-h-[400px] pb-3 overflow-hidden overflow-y-auto text-[12px]">
         </div>
     </div>
     <!-- gl table -->
