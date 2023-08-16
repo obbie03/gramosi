@@ -10,7 +10,7 @@ class Client {
         this.banks = []
         this.cc = []
         this.coa = []
-        this.baseUrl = 'http://41.63.9.34/gramosiBackend'
+        this.baseUrl = 'http://localhost/gramosiBackend'
         this.uid = 1
         this.init_print_format()
     }
@@ -209,10 +209,8 @@ class Client {
             })
     
             this.fetch_data(this.baseUrl + '/reciepts.php?receipts').then(resolve => {
-    
                 if (resolve?.data?.length > 0) {
                     let total = 0, count = 0
-    
                     $('.receipts-body').empty() && resolve?.data.map((rec, i) => {
                         total += parseFloat(rec.amount)
                         count += 1
@@ -270,6 +268,33 @@ class Client {
         })
         $('.report-menu.active').click()
     }
+
+
+
+
+    //init_settings page
+    init_settings() {
+        const cls = this
+        
+        $('.settings-menu').click(function (e) {
+            e.preventDefault()
+            $('.settings-menu').removeClass('active')
+            $(this).addClass('active')
+            const url = $(this).attr('href')
+            cls.fetch_data(url, 'text').then(resolve => {
+                if (resolve.status) {
+                    $('.settings-container').html(resolve.data)
+                    if (url.includes('uploads')) {
+                        
+                    }
+                   
+                }
+            })
+        })
+        $('.settings-menu.active').click()
+    }
+
+
     // to neable print and export buttons
     enable_report_action_buttons() {
         const cls = this
@@ -403,6 +428,7 @@ makeSels = (arr, name, key, item) => {
     // fetching html 
     async fetch_page_content() {
         const url = $('.nav-menu-link.active').attr('href') || ''
+        console.log(url)
         this.fetch_data(url, 'text').then(resolve => {
             if (resolve.status) {
                 $('.inner-content').html(resolve.data)
@@ -415,6 +441,10 @@ makeSels = (arr, name, key, item) => {
                 if (url.includes('./reports/wrapper.html')) {
                     this.init_reports()
                 }
+                if (url.includes('settings/settings.html')) {
+                    this.init_settings()
+                }
+                
             }
         })
     }
@@ -424,6 +454,8 @@ makeSels = (arr, name, key, item) => {
             if (res.status) {
                 var data = this.mergeArr(res.data.bills, res.data.recs).sort((a,b)=> new Date(a.date) - new Date(b.date))
                 let debits = 0, credits = 0
+                console.log(data)
+                console.log(this.coa)
                 data.map((r, i) => {
                     debits += (r[1][0] == 'R'?parseFloat(r.amount):0)
                     credits += (r[1][0] == 'I'?parseFloat(r.amount):0)
@@ -484,7 +516,7 @@ makeSels = (arr, name, key, item) => {
                     debits += this.sumOfArray(data2.map(res=>parseFloat(res.amount)))
                     credits += this.sumOfArray(data.map(res=>parseFloat(res.total_amount)))
                     $('.tb-body').append(`
-                        <div class="w-full tr grid grid-cols-11 h-[40px] border-b rounded-t-md overflow-hidden text-[13px] gap-x-4">
+                        <div class="w-full tr grid grid-cols-17 h-[40px] border-b rounded-t-md overflow-hidden text-[13px] gap-x-4">
                             <div val="${i + 1}" class="td flex items-center h-full w-full col-span-1 border-r pl-3 flex items-center justify-center">
                                 <div class="w-full col-span-1 h-full flex items-center justify-center">
                                     <div class="w-[23px] h-[23px] rounded-full bg-indigo-100 flex items-center justify-center">
@@ -493,8 +525,12 @@ makeSels = (arr, name, key, item) => {
                                 </div>
                             </div>
                             <div val="${data[0].firstname} ${data[0].firstname}" class="td flex items-center h-full w-full col-span-4  border-r text-[12px]">${data[0].firstname} ${data[0].firstname}</div>
+                            <div val="${data[0].firstname} ${data[0].firstname}" class="td flex items-center h-full w-full col-span-2  border-r text-[12px]">${data[0].firstname} ${data[0].firstname}</div>
                             <div val="${this.sumOfArray(data2.map(res=>parseFloat(res.amount)))}" class="td flex items-center h-full w-full col-span-2  border-r font-bold text-[11px]">
                                 ${this.format_amount(this.sumOfArray(data2.map(res=>parseFloat(res.amount))))}
+                            </div>
+                            <div val="${this.sumOfArray(data.map(res=>parseFloat(res.total_amount)))}" class="td flex items-center h-full w-full col-span-2  border-rs text-red-600 font-bold text-[11px]">
+                                ${this.format_amount(this.sumOfArray(data.map(res=>parseFloat(res.total_amount))))}
                             </div>
                             <div val="${this.sumOfArray(data.map(res=>parseFloat(res.total_amount)))}" class="td flex items-center h-full w-full col-span-2  border-rs text-red-600 font-bold text-[11px]">
                                 ${this.format_amount(this.sumOfArray(data.map(res=>parseFloat(res.total_amount))))}
@@ -632,6 +668,25 @@ makeSels = (arr, name, key, item) => {
     loader = () => {
         return `<div class="flex justify-center"><i class=" text-default fa fa-spinner fa-3x fa-spin"></i></div>`
     }
+
+    readExcelFile(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const data = e.target.result;
+                const workbook = XLSX.read(data, { type: "binary" });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                resolve(jsonData);
+            };
+            reader.onerror = function (error) {
+                reject(error);
+            };
+            reader.readAsBinaryString(file);
+        });
+    }
+    
 }
 const client = new Client()
 client.getGen()

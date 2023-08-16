@@ -1,0 +1,72 @@
+<div class="w-full flex items-center justify-start flex-col bg-white min-h-[400px] rounded-md mt-10 p-5">
+    <div class="flex w-full items-center justify-between border-b pb-4">
+        <div class="flex flex-col">
+            <h1 class="text-[25px] text-slate-800 font-bold">Settings</h1>
+            <span class="text-[12px] text-slate-700"></span>
+        </div>
+
+    </div>
+    <div class="w-full min-h-[500px] h-full  rounded-md p-3">
+        <div class="settings-nav w-full flex items-center justify-between text-[12px] bg-white rounded-md h-[60px] px-4">
+            <div class="w-full flex items-center justify-start">
+                <a href="/client/settings/uploads.html" for="gl-table" class="settings-menu mr-10 font-bold active">
+                    Uploads
+                </a>
+               
+            </div>
+        </div>
+        
+        <div class="w-full settings-container h-[84%] bg-white rounded-md min-h-[400px] pl-5"></div>
+        
+    </div>
+    
+ 
+</div>
+   
+
+    <!-- Modal Background -->
+    <div style="visibility: hidden;" class="payModal fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+        <!-- Modal Content -->
+        <div style="max-height: 35rem;" class="bg-white rounded p-8 w-full mx-20 shadow-lg overflow-y-auto">
+          <!-- Modal Header -->
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold">Make Payment</h2>
+            <button onclick="$('.payModal').css('visibility', 'hidden')" class="text-gray-500 hover:text-gray-700">
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <!-- Modal Body -->
+          <div class="p-4">
+            <hr class="my-4">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <input id="exType" type="text" placeholder="Enter CHQ" class="border rounded p-2 w-full mb-4">
+                </div>
+                <div>
+                    <select id="cashType" class="border rounded p-2 w-full mb-4">
+                        <option value="">Select type</option>
+                        <option value="1">Income</option>
+                        <option value="2">Expense</option>
+                    </select>
+                </div>
+                <div>
+                    <input id="Examount" type="text" placeholder="amount" class="border rounded p-2 w-full mb-4">
+                </div>
+                <div>
+                    <input id="Expaye" type="text" placeholder="Enter payee" class="border rounded p-2 w-full mb-4">
+                </div>
+            </div>
+            <textarea id="Exdesc" cols="30" rows="" placeholder="description" class="border rounded p-2 w-full mb-4"></textarea>
+            <hr class="my-4">
+          </div>
+          <!-- Modal Footer (optional) -->
+          <div class="mt-4 flex justify-end">
+            <button onclick="$('.payModal').css('visibility', 'hidden')"  class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold py-2 px-4 rounded">
+              Close
+            </button>
+            <button id="submitPayBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mx-2"><i class="fa fa-paper-plane"></i> Submit</button>
+          </div>
+        </div>
+      </div>

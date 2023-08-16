@@ -1,0 +1,84 @@
+<div>
+
+
+    <div class="flex items-center space-x-4">
+        <select class="border rounded px-4 py-2 focus:outline-none focus:border-blue-400" name="" id="upType">
+            <option value="">Select type of data</option>
+            <option value="ECOA">ECOA</option>
+            <option value="RCOA">RCOA</option>
+            <option value="Customers">Customers</option>
+        </select>
+    
+        <input type="file" class="hidden" id="attach">
+    
+        <label class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded cursor-pointer" for="attach">
+            <i class="fa fa-upload"></i> Upload File
+        </label>
+    </div>
+    
+    <div id="dataFromExcel" class="mt-4"></div>
+    
+</div>
+
+
+
+<script>
+            var uploadData = []
+            function uploadResults(){
+                // $('#dataFromExcel').html(client.loader);
+                var obj = {
+                    upType:$('#upType').val(),
+                    upData:uploadData
+                }
+                console.log(uploadData.length)
+                client.postData(client.baseUrl+'/uploads.php',obj, (response)=>{
+                    console.log(response)
+                    if(response.status == 200){
+                        ourAlert(response.msg, 1)
+                        // $('#dataFromExcel').html('');
+                    }else{
+                        ourAlert(response.msg, 2)
+                        // $('#dataFromExcel').html('Something went wrong, upload again');
+                    }
+                })
+            }
+    $(document).ready(function () {
+
+    $("#attach").change(function (e) {
+        const file = e.target.files[0];
+        client.readExcelFile(file)
+            .then(data => {
+                uploadData = [...data]
+                var out = `<table class="table border border-collapse w-full">
+                            <thead class="bg-gray-200">
+                                <tr>`;
+                            for (let key in data[0]) {
+                                out += `<th class="border px-4 py-2">${key}</th>`;
+                            }
+                            out += `</tr>
+                            </thead>
+                            <tbody>`;
+                            data.map((res) => {
+                                out += `<tr>`;
+                                for (let key in data[0]) {
+                                    out += `<td class="border px-4 py-2">${res[key]}</td>`;
+                                }
+                                out += `</tr>`;
+                            });
+                            out += `</tbody>
+                            </table>
+                            <a onclick="uploadResults()" class="mt-4 inline-block px-4 py-2 bg-green-500 text-white hover:bg-green-700">
+                            <i class="fa fa-upload"></i> Upload
+                            </a>
+                            <br><br>`;
+                            $('#dataFromExcel').html(out);
+            })
+            .catch(error => {
+                console.error("Error reading file:", error);
+                client.ourAlert('Error reading file', 2)
+            });
+    });
+
+  
+});
+</script>

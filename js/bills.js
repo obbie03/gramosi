@@ -28,12 +28,13 @@ $('#submitPay').click(function(){
   })
 })
    
-    const selCust = (id, name)=>{
-        $('#custDet').html(name)
-        $('#uniId').slideDown()
-        $('#custIdzz').val(id)
-        $('.custNameResp').slideUp()
-    }
+function selCust(id, name){
+  $('#custDet').html(name)
+  $('#uniId').slideDown()
+  $('#custIdzz').val(id)
+  $('.custNameResp').slideUp()
+}
+ 
 $('#custName').keyup(function(){
 $('.custNameResp').slideDown()
 var name = $(this).val()
@@ -51,7 +52,7 @@ $.getJSON(client.baseUrl+'/general.php?custName='+name, (response)=>{
   $('#colce').html(client.makeSels(client.cc, 'collection center', 0, 1))
 
 
-const disArr = (arr) => {
+function disArr(arr){
   var out = `
     <table class="min-w-full divide-y divide-gray-200">
       <thead class="bg-gray-50">
@@ -95,7 +96,7 @@ const disArr = (arr) => {
 
 var arr = []
 var finOut = ''
-const addToList = ()=>{
+function addToList(){
   var cashbook = $('#banks').val()
   var sof = $('#sof').val()
   var cc = $('#colce').val()
@@ -118,7 +119,7 @@ if(arr.length > 0){
 $('#amount').val()
 }
 
-const deletearr = (index)=>{
+function deletearr(index){
   arr.splice(index-1,1)
   var out = disArr(arr)
   $('#listOfPay').html(out)

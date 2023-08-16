@@ -76,7 +76,7 @@ input[type="checkbox"] {
 }
 
 /* report */
-.report-menu.active {
+.report-menu.active, .settings-menu.active {
     color: #8911d4;
     font-weight: bolder;
     border-bottom: 2px #8911d4 solid;
