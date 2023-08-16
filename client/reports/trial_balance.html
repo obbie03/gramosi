@@ -4,16 +4,16 @@
             <h4 class="text-[20px] text-slate-800 font-bold">Customers</h4>
         </div>
         <div class="flex items-center justify-end">
-            <label for="from" class="text-[13px] text-slate-600 mr-2">From</label>
+            <!-- <label for="from" class="text-[13px]  text-slate-600 mr-2">From</label>
             <input type="date" id="from"
-                class="w-[220px] border rounded-md  text-slate-700 px-3 h-[40px] outline-none text-[12px]"
+                class="w-[220px] from-date border rounded-md  text-slate-700 px-3 h-[40px] outline-none text-[12px]"
                 placeholder="From">
             <label class="text-[12px] text-slate-600 mx-2">To</label>
             <input type="date"
-                class="w-[220px] rounded-md mr-2 text-slate-700 border px-2 h-[40px] outline-none text-[12px]"
-                placeholder="To">
+                class="w-[220px] to-date rounded-md mr-2 text-slate-700 border px-2 h-[40px] outline-none text-[12px]"
+                placeholder="To"> -->
             <div class="search flex items-center justify-center border rounded-md px-3 overflow-hidden">
-                <input type="text" class="text-center w-[220px] h-[40px] outline-none text-[12px]"
+                <input type="text" class="text-center search-field w-[220px] h-[40px] outline-none text-[12px]"
                     placeholder="Search Customer">
                 <i class="fa fa-search text-slate-400" aria-hidden="true"></i>
             </div>
@@ -34,46 +34,48 @@
             <div col="balance" class="th flex items-center h-full w-full col-span-2  border-r">Balance</div>
             <div col="Credit" class="th flex items-center h-full w-full col-span-2  border-r">Actions</div>
         </div>
-        <div class="tb-body t-body w-full mt-1 max-h-[400px] pb-3 overflow-hidden overflow-y-auto text-[12px]">
+        <div class="tb-body tbody w-full mt-1 max-h-[400px] pb-3 overflow-hidden overflow-y-auto text-[12px]">
         </div>
     </div>
     <!-- gl table -->
 </div>
 
- <!-- Modal Background -->
- <div  style="visibility: hidden;" class="showStatement fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+<!-- Modal Background -->
+<div style="visibility: hidden;"
+    class="showStatement fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
     <!-- Modal Content -->
     <div style="max-height: 25rem;" class="bg-white rounded p-8 w-full mx-20 shadow-lg overflow-y-auto">
-      <!-- Modal Header -->
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-semibold">Customer Statement</h2>
-        <button onclick="$('.showStatement').css('visibility', 'hidden')" class="text-gray-500 hover:text-gray-700">
-          <i class="fa fa-times fa-lg"></i>
-        </button>
-      </div>
-      <!-- Modal Body -->
-      <div id="statement" class="p-4">
-        
-      </div>
-      <!-- Modal Footer (optional) -->
-      <div class="mt-4 flex justify-end">
-        <button onclick="$('.showStatement').css('visibility', 'hidden')"  class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold py-2 px-4 rounded">
-          Close
-        </button>
-      </div>
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold">Customer Statement</h2>
+            <button onclick="$('.showStatement').css('visibility', 'hidden')" class="text-gray-500 hover:text-gray-700">
+                <i class="fa fa-times fa-lg"></i>
+            </button>
+        </div>
+        <!-- Modal Body -->
+        <div id="statement" class="p-4">
+
+        </div>
+        <!-- Modal Footer (optional) -->
+        <div class="mt-4 flex justify-end">
+            <button onclick="$('.showStatement').css('visibility', 'hidden')"
+                class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold py-2 px-4 rounded">
+                Close
+            </button>
+        </div>
     </div>
 </div>
 
 <script>
-    
-        const showStatement = (id)=>{
-            $('.showStatement').css('visibility', 'visible')
-            $('#statement').html(client.loader())
-            $.getJSON(client.baseUrl+'/reports.php?state='+id, (response)=>{
-                    var data = client.mergeArr(response.bills, response.recs).sort((a,b)=> new Date(a.date) - new Date(b.date))
-                    var count = 1
-                    let debits = 0, credits = 0
-                    var out = `<hr class="my-4">
+
+    const showStatement = (id) => {
+        $('.showStatement').css('visibility', 'visible')
+        $('#statement').html(client.loader())
+        $.getJSON(client.baseUrl + '/reports.php?state=' + id, (response) => {
+            var data = client.mergeArr(response.bills, response.recs).sort((a, b) => new Date(a.date) - new Date(b.date))
+            var count = 1
+            let debits = 0, credits = 0
+            var out = `<hr class="my-4">
                             <h3 class="text-2xl font-semibold">Statement for ${data[0].firstname} ${data[0].lastname}</h3>
                             <hr>
                             <div class="overflow-x-auto">
@@ -91,11 +93,11 @@
                                     </thead>
                                     <tbody>`;
 
-                        data.map((r) => {
-                            debits += r[1][0] === 'R' ? parseFloat(r.amount) : 0;
-                            credits += r[1][0] === 'I' ? parseFloat(r.amount) : 0;
-                            var balance = debits - credits;
-                            out += `<tr class="${balance < 0 ? 'bg-red-100' : ''}">
+            data.map((r) => {
+                debits += r[1][0] === 'R' ? parseFloat(r.amount) : 0;
+                credits += r[1][0] === 'I' ? parseFloat(r.amount) : 0;
+                var balance = debits - credits;
+                out += `<tr class="${balance < 0 ? 'bg-red-100' : ''}">
                                 <td class="px-6 py-4 whitespace-no-wrap">${count++}</td>
                                 <td class="px-6 py-4 whitespace-no-wrap">${r.date.substring(0, 10)}</td>
                                 <td class="px-6 py-4 whitespace-no-wrap">${r[1][0] === 'R' ? r.receipt_no : r.invoice_no}</td>
@@ -104,9 +106,9 @@
                                 <td class="px-6 py-4 whitespace-no-wrap">${client.format_amount(balance)}</td>
                                 <td class="px-6 py-4 whitespace-no-wrap">${r.description}</td>
                             </tr>`;
-                        });
+            });
 
-                        out += `<tr class="bg-gray-200">
+            out += `<tr class="bg-gray-200">
                             <th class="px-6 py-3" colspan="3">Total</th>
                             <th class="px-6 py-3">${client.format_amount(debits)}</th>
                             <th class="px-6 py-3">${client.format_amount(credits)}</th>
@@ -115,10 +117,10 @@
                         </tr></tbody></table></div>`;
 
 
-                    $('#statement').html(out)
-            })
+            $('#statement').html(out)
+        })
 
-        }
-        
-    
+    }
+
+
 </script>

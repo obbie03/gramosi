@@ -7,14 +7,14 @@
         <div class="flex items-center justify-end">
             <label for="from" class="text-[13px] text-slate-600 mr-2">From</label>
             <input type="date" id="from"
-                class="w-[220px] border rounded-md  text-slate-700 px-3 h-[40px] outline-none text-[13px]"
+                class="w-[220px] from-date border rounded-md  text-slate-700 px-3 h-[40px] outline-none text-[13px]"
                 placeholder="From">
             <label class="text-[13px] text-slate-600 mx-2">To</label>
             <input type="date"
-                class="w-[220px] rounded-md mr-2 text-slate-700 border px-2 h-[40px] outline-none text-[13px]"
+                class="w-[220px] to-date rounded-md mr-2 text-slate-700 border px-2 h-[40px] outline-none text-[13px]"
                 placeholder="To">
             <div class="search flex items-center justify-center border rounded-md px-3 overflow-hidden">
-                <input type="text" class="text-center w-[200px] h-[40px] outline-none text-[13px]"
+                <input type="text" class="search-field text-center w-[200px] h-[40px] outline-none text-[13px]"
                     placeholder="Search Receipts">
                 <i class="fa fa-search text-slate-400" aria-hidden="true"></i>
             </div>
@@ -27,11 +27,12 @@
         </div>
     </div>
     <!-- bills table -->
-    <div class="w-full table mt-5 text-[13px] bg-slate-50 pb-5 rounded-b-md">
+    <div class="w-full receipts-table table mt-5 text-[13px] bg-slate-50 pb-5 rounded-b-md">
         <div
-            class="w-full tr grid grid-cols-16 h-[50px] bg-default text-white rounded-t-md overflow-hidden text-[13px] gap-x-4">
-            <div class="th flex items-center justify-center h-full w-full col-span-1">
-                <input type="checkbox" name="" id="all_bills_selector" class="accent-default">
+            class="w-full tr grid grid-cols-9 h-[50px] bg-default text-white rounded-t-md overflow-hidden text-[13px] gap-x-4">
+            <div class="th flex items-center justify-start justify-center h-full w-full">
+                <input type="checkbox" name="" id="all_bills_selector" class="accent-default ml-3">
+                <div class="th flex items-center justify-start h-full w-full ml-5">Sn</div>
             </div>
             <div class="th flex items-center h-full w-full col-span-1">Sn</div>
             <div class="th flex items-center h-full w-full col-span-2">Voucher</div>
@@ -41,7 +42,8 @@
             <div class="th flex items-center h-full w-full col-span-2">Credit</div>
             <div class="th flex items-center h-full w-full col-span-2">Actions</div>
         </div>
-        <div class="tbody bills_rows w-full mt-1 max-h-[400px] pb-3 pr-2 overflow-hidden overflow-y-auto text-[12px]">
+        <div
+            class="tbody receipts-body w-full mt-1 max-h-[400px] pb-3 pr-2 overflow-hidden overflow-y-auto text-[12px]">
         </div>
     </div>
     <!-- bills table -->
@@ -50,7 +52,7 @@
         <div class="flex items-center justify-center flex-row text-[12px] text-slate-700">
             <div class="flex items-center justify-start">
                 <strong class="">Total Rows: </strong>
-                <span class="total_bill_rows mx-2">0</span>
+                <span class="total_receipt_rows mx-2">0</span>
             </div>
             |
         </div>
@@ -74,7 +76,6 @@
     </div>
     <!-- Bills totals -->
 </div>
-   
 
     <!-- Modal Background -->
     <div style="visibility: hidden;" class="payModal fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
@@ -121,8 +122,8 @@
             <button id="submitPayBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mx-2"><i class="fa fa-paper-plane"></i> Submit</button>
           </div>
         </div>
-      </div>
-  
+    </div>
+</div>
 
           
 
