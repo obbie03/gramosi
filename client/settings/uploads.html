@@ -1,47 +1,43 @@
 <div>
-
-
     <div class="flex items-center space-x-4">
         <select class="border rounded px-4 py-2 focus:outline-none focus:border-blue-400" name="" id="upType">
             <option value="">Select type of data</option>
             <option value="ECOA">ECOA</option>
             <option value="RCOA">RCOA</option>
             <option value="Customers">Customers</option>
+            <option value="valuation">Valuation roll</option>
+            <option value="bank">Banks</option>
         </select>
-    
         <input type="file" class="hidden" id="attach">
-    
         <label class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded cursor-pointer" for="attach">
             <i class="fa fa-upload"></i> Upload File
         </label>
     </div>
-    
     <div id="dataFromExcel" class="mt-4"></div>
-    
 </div>
 
-
-
 <script>
+
             var uploadData = []
             function uploadResults(){
-                // $('#dataFromExcel').html(client.loader);
-                var obj = {
-                    upType:$('#upType').val(),
-                    upData:uploadData
-                }
-                console.log(uploadData.length)
+                const batchSize = 100;
+                for (let i = 0; i < uploadData.length; i += batchSize) {
+                    const batch = uploadData.slice(i, i + batchSize);
+                    const obj = {
+                        upType:$('#upType').val(),
+                        upData:batch
+                    };
                 client.postData(client.baseUrl+'/uploads.php',obj, (response)=>{
-                    console.log(response)
                     if(response.status == 200){
-                        ourAlert(response.msg, 1)
+                        client.ourAlert(response.msg, 1)
                         // $('#dataFromExcel').html('');
                     }else{
-                        ourAlert(response.msg, 2)
+                        client.ourAlert(response.msg, 2)
                         // $('#dataFromExcel').html('Something went wrong, upload again');
                     }
                 })
             }
+        }
     $(document).ready(function () {
 
     $("#attach").change(function (e) {

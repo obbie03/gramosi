@@ -97,6 +97,7 @@
                 debits += r[1][0] === 'R' ? parseFloat(r.amount) : 0;
                 credits += r[1][0] === 'I' ? parseFloat(r.amount) : 0;
                 var balance = debits - credits;
+                
                 out += `<tr class="${balance < 0 ? 'bg-red-100' : ''}">
                                 <td class="px-6 py-4 whitespace-no-wrap">${count++}</td>
                                 <td class="px-6 py-4 whitespace-no-wrap">${r.date.substring(0, 10)}</td>

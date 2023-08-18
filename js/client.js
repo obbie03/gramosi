@@ -13,6 +13,7 @@ class Client {
         this.baseUrl = 'http://localhost/gramosiBackend'
         this.uid = 1
         this.init_print_format()
+        this.getGen()
     }
 
 
@@ -72,21 +73,22 @@ class Client {
 
     //bulk billings
     bulkBilling = () => {
-        $.getJSON(client.baseUrl + '/bills.php?bulkbills=' + 1, (response) => {
+        $.getJSON(this.baseUrl + '/bills.php?bulkbills=' + 1, (response) => {
             if (response.status == 'done') {
-                client.ourAlert('Successful', 1)
+                this.ourAlert('Successful', 1)
+
             } else {
-                client.ourAlert('Something went wrong', 2)
+                this.ourAlert('Something went wrong', 2)
             }
         })
     }
 
     //show bill
     showBill = (id, amount) => {
-        $('#indet').html(client.loader)
+        $('#indet').html(this.loader)
         $('#iid').val(id)
         $('.showBill').css('visibility', 'visible')
-        $.getJSON(client.baseUrl + '/bills.php?bill=' + id, (response) => {
+        $.getJSON(this.baseUrl + '/bills.php?bill=' + id, (response) => {
             var bill = response.bills
             var recs = response.recs
             var out = `<span class="float-right"> <img class="w-[70px] h-[70px] object-contain mr-2" src = '../img/logo.png'> ${bill[0].date.substring(0, 10)}</span>
@@ -101,15 +103,19 @@ class Client {
                             </tr>
                             <tr>
                                 <th class="px-4 py-2 bg-gray-100 border text-left">Source of fund</th>
-                                <td class="px-4 py-2 border">${client.useWanted(client.sof, bill[0].cc_id).source_of_fund}</td>
+                                <td class="px-4 py-2 border">${this.useWanted(this.sof, bill[0].sof_id).source_of_fund}</td>
                             </tr>
                             <tr>
                                 <th class="px-4 py-2 bg-gray-100 border text-left">Collection Center</th>
-                                <td class="px-4 py-2 border">${client.useWanted(client.cc, bill[0].cc_id).collection_name}</td>
+                                <td class="px-4 py-2 border">${this.useWanted(this.cc, bill[0].cc_id).collection_name}</td>
                             </tr>
                             <tr>
-                                <th class="px-4 py-2 bg-gray-100 border text-left">Outstanding Balance</th>
-                                <td class="px-4 py-2 border">${client.format_amount(amount)}</td>
+                            <th class="px-4 py-2 bg-gray-100 border text-left">Collection Center</th>
+                            <td class="px-4 py-2 border">${this.useWanted(this.banks, bill[0].bank).name}</td>
+                        </tr>
+                            <tr>
+                                <th class="px-4 py-2 bg-gray-100 border text-left">Invoice Balance</th>
+                                <td class="px-4 py-2 border">${this.format_amount(amount)}</td>
                             </tr>
                         </table>
                               
@@ -123,16 +129,17 @@ class Client {
                     `
             var count = 1
             bill.map((res) => {
+                
                 out += `<tr class="${count % 2 === 0 ? 'bg-gray-100' : 'bg-white'}">
                             <td class="px-4 py-2 border">${count++}</td>
-                            <td class="px-4 py-2 border">${client.useWanted(client.coa, res.coa_id).name}</td>
+                            <td class="px-4 py-2 border">${this.useWanted(this.coa, res.coa_id).name}</td>
                             <td class="px-4 py-2 border">${res.description}</td>
-                            <td class="px-4 py-2 border">${client.format_amount(res.amount)}</td>
+                            <td class="px-4 py-2 border">${this.format_amount(res.amount)}</td>
                         </tr>`
             })
             out += `<tr>
                         <th class="px-4 py-2 bg-gray-100 border" colspan="3">Total</th>
-                        <th class="px-4 py-2 bg-gray-100 border">${client.format_amount(client.sumOfArray(bill.map((res) => parseFloat(res.amount))))}</th>
+                        <th class="px-4 py-2 bg-gray-100 border">${this.format_amount(this.sumOfArray(bill.map((res) => parseFloat(res.amount))))}</th>
                     </tr>
                 </table>
                 <table class="table border-collapse w-full mt-3">
@@ -151,12 +158,12 @@ class Client {
                             <td class="px-4 py-2 border">${res.receipt_no}</td>
                             <td class="px-4 py-2 border">${res.description}</td>
                             <td class="px-4 py-2 border">${res.date.substring(0, 10)}</td>
-                            <td class="px-4 py-2 border">${client.format_amount(res.amount)}</td>
+                            <td class="px-4 py-2 border">${this.format_amount(res.amount)}</td>
                         </tr>`
             })
             out += `<tr>
                         <th class="px-4 py-2 bg-gray-100 border" colspan="4">Total</th>
-                        <th class="px-4 py-2 bg-gray-100 border">${client.format_amount(client.sumOfArray(recs.map((res) => parseFloat(res.amount))))}</th>
+                        <th class="px-4 py-2 bg-gray-100 border">${this.format_amount(this.sumOfArray(recs.map((res) => parseFloat(res.amount))))}</th>
                     </tr>
                 </table>
                 `
@@ -249,7 +256,7 @@ class Client {
                 $('.receipt-total').text(this.format_amount(total))
                 $('.receipt-count').text(count)
                 $('.print-receipt').click(function () {
-                    var newTab = window.open(`/gramosi/client/print_formats/receipt.html?rid=${$(this).attr('id')}`, '_blank');
+                    var newTab = window.open(`/client/print_formats/receipt.html?rid=${$(this).attr('id')}`, '_blank');
                     newTab.focus();
                 })
             }
@@ -358,6 +365,7 @@ class Client {
             }
             else if (bill_id) {
                 const cls = this
+                cls.getGen()
                 $.getJSON(this.baseUrl + '/bills.php?bill=' + bill_id, (response) => {
                     let bill = response.bills[0],
                         receipts = response.recs,
@@ -367,7 +375,6 @@ class Client {
                     })
                     if (bill) {
                         const items = cls.useWanted(cls.coa, bill.coa_id)?.name
-                        console.log(bill)
                         $('.bill-no').html(bill.invoice_no)
                         $('.bill-date').html(this.convert_date(bill.date.split(' ')[0]))
                         $('.customer-names').html(`${bill.firstname} ${bill.lastname}`)
@@ -485,7 +492,6 @@ class Client {
     // fetching html 
     async fetch_page_content() {
         const url = $('.nav-menu-link.active').attr('href') || ''
-        console.log(url)
         this.fetch_data(url, 'text').then(resolve => {
             if (resolve.status) {
                 $('.inner-content').html(resolve.data)
@@ -514,8 +520,7 @@ class Client {
             if (res.status) {
                 var data = this.mergeArr(res.data.bills, res.data.recs).sort((a, b) => new Date(a.date) - new Date(b.date))
                 let debits = 0, credits = 0
-                console.log(data)
-                console.log(this.coa)
+       
                 data.map((r, i) => {
                     debits += (r[1][0] == 'R' ? parseFloat(r.amount) : 0)
                     credits += (r[1][0] == 'I' ? parseFloat(r.amount) : 0)
@@ -582,10 +587,12 @@ class Client {
                     let obj = {
                         customer: `${data[0].firstname} ${data[0].lastname}`,
                         debit: this.sumOfArray(data2.map(res => parseFloat(res.amount))),
-                        credit: this.sumOfArray(data.map(res => parseFloat(res.total_amount)))
+                        credit: this.sumOfArray(data.map(res => parseFloat(res.total_amount))),
+                        balance:this.sumOfArray(data.map(res => parseFloat(res.balance)))
                     }
+                    
                     $('.tb-body').append(`
-                        <div class="w-full tr grid grid-cols-11 h-[40px] border-b rounded-t-md overflow-hidden text-[13px] gap-x-4">
+                        <div class="w-full tr grid grid-cols-16 h-[40px] border-b rounded-t-md overflow-hidden text-[13px] gap-x-4">
                         <span row='${JSON.stringify(obj)}' class="row_object hidden"></span>
                             <div val="${i + 1}" class="td flex items-center h-full w-full col-span-1 border-r pl-3 flex items-center justify-center">
                                 <div class="w-full col-span-1 h-full flex items-center justify-center">
@@ -595,15 +602,18 @@ class Client {
                                 </div>
                             </div>
                             <div val="${obj.customer}" class="td flex items-center h-full w-full col-span-4  border-r text-[12px]">${obj.customer}</div>
-                            <div val="${obj.debit}" class="td flex items-center h-full w-full col-span-2  border-r font-bold text-[11px]">
+                            <div val="${obj.balance}" class="td flex items-center h-full w-full col-span-2 text-red-600  border-r font-bold text-[11px]">
+                                ${this.format_amount(obj.balance)}
+                            </div>
+                            <div val="${obj.credit}" class="td flex items-center h-full w-full col-span-2  border-rs font-bold text-[11px]">
                                 ${this.format_amount(obj.debit)}
                             </div>
                             <div val="${obj.credit}" class="td flex items-center h-full w-full col-span-2  border-rs text-red-600 font-bold text-[11px]">
                                 ${this.format_amount(obj.credit)}
                             </div>
-                            <div val="${this.sumOfArray(data.map(res=>parseFloat(res.total_amount)))}" class="td flex items-center h-full w-full col-span-2  border-rs text-red-600 font-bold text-[11px]">
-                                ${this.format_amount(this.sumOfArray(data.map(res=>parseFloat(res.total_amount))))}
-                            </div>
+                            <div val="${obj.debit - obj.balance - obj.credit}" class="td flex items-center h-full w-full col-span-2  border-rs text-red-600 font-bold text-[11px]">
+                            ${this.format_amount(obj.debit - obj.balance - obj.credit)}
+                        </div>
                             <div class="td flex items-center h-full w-full col-span-2  border-rs font-bold text-[11px]">
                             <button
                             title="${t}"
@@ -640,7 +650,7 @@ class Client {
     // fetching bills table
     async populate_bills_rows() {
         const cls = this
-        this.fetch_data(client.baseUrl + '/bills.php?bills=1').then(resolve => {
+        this.fetch_data(this.baseUrl + '/bills.php?bills=1').then(resolve => {
             this.total_unpaid = 0
             this.total_rows = 0
             if (resolve.status) {
@@ -659,7 +669,7 @@ class Client {
                             </div>
                             <div class="th flex items-center h-full w-full col-span-2">${row.invoice_no}</div>
                             <div class="th flex items-center h-full w-full col-span-2">${this.convert_date(row.date.substring(0, 10))}</div>
-                            <div class="th flex items-center h-full w-full col-span-2">Bruce Chikola</div>
+                            <div class="th flex items-center h-full w-full col-span-2">${row.firstname} ${row.lastname}</div>
                             <div class="th flex items-center h-full w-full col-span-2">${this.format_amount(row.amount, 2)}</div>
                             <div class="th flex items-center h-full w-full col-span-2">
                                 <button
@@ -690,7 +700,7 @@ class Client {
                 // $('.receipt-total').text(this.format_amount(total))
                 // $('.bill-count').text(count)
                 $('.print-bill').click(function () {
-                    var newTab = window.open(`/gramosi/client/print_formats/bill.html?bid=${$(this).attr('id')}`, '_blank');
+                    var newTab = window.open(`/client/print_formats/bill.html?bid=${$(this).attr('id')}`, '_blank');
                     newTab.focus();
                 })
                 // enable filters
@@ -749,7 +759,7 @@ class Client {
                 $('.receipt-count').text(count)
                 $('.total_receipt_rows').html(count)
                 $('.print-receipt').click(function () {
-                    var newTab = window.open(`/gramosi/client/print_formats/receipt.html?rid=${$(this).attr('id')}`, '_blank');
+                    var newTab = window.open(`/client/print_formats/receipt.html?rid=${$(this).attr('id')}`, '_blank');
                     newTab.focus();
                 })
                 this.enabl_filters('.receipts-table', 'table')
@@ -849,8 +859,8 @@ class Client {
             }
         });
     }
-    getGen = () => {
-        $.getJSON(client.baseUrl + '/general.php?getgen=1', (response) => {
+    async getGen(){
+        $.getJSON(this.baseUrl + '/general.php?getgen=1', (response) => {
             this.sof = response.sof
             this.banks = response.banks
             this.cc = response.cc
@@ -899,4 +909,3 @@ class Client {
     
 }
 const client = new Client()
-client.getGen()

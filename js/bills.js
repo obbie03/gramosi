@@ -41,14 +41,14 @@ var name = $(this).val()
 var out = ``
 $.getJSON(client.baseUrl+'/general.php?custName='+name, (response)=>{
     response.map((res)=>{
-        out += `<button class="btn w-100" title="${res.u_id}" id="${res.firstname} ${res.lastname}: ${res.nrc}" onclick="selCust(this.title, this.id)">${res.firstname} ${res.lastname}: ${res.nrc}</button><br>`
+        out += `<button class="btn w-100" title="${res.u_id}" id="${res.firstname} ${res.lastname}: ${res.account_no}" onclick="selCust(this.title, this.id)">${res.firstname} ${res.lastname}: ${res.account_no}</button><br>`
     })
     $('.custNameResp').html(out)
 })
 })
 
   $('#sof').html(client.makeSels(client.sof, 'source of funds', 0, 2))
-  $('#banks').html(client.makeSels(client.banks, 'cash book', 0, 3))
+  $('#banks').html(client.makeSels(client.banks, 'cash book', 0, 4))
   $('#colce').html(client.makeSels(client.cc, 'collection center', 0, 1))
 
 
@@ -134,6 +134,7 @@ $('#uniId').keyup(function(){
   if(val.length == 6){
       $.getJSON(client.baseUrl+'/general.php?uniqueId='+val,(response)=>{
           if(response.length > 0){
+            console.log(response)
               var out =`${response[0].name}~${response[0].account}~${response[0].id}`
               $('#codeResp').html(out)
               $('#codeRespDiv').html(response[0].name)
