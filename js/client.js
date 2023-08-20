@@ -669,7 +669,7 @@ class Client {
         $('#customer-form').submit(function (e) {
             e.preventDefault()
             let data = { submission_type: $(this).attr('submission_type') }
-            $(this).find('input').map((i, row) => {
+            $(this).find('input, select').map((i, row) => {
                 data[$(row).attr('id')] = $(row).val()
             })
             $('.loader-cover').removeClass('hidden').addClass('flex')
