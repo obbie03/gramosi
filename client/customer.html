@@ -1,0 +1,154 @@
+<div class="w-full flex items-center justify-start flex-col bg-white min-h-[400px] rounded-md mt-10 p-5">
+    <div class="flex w-full items-center justify-between border-b pb-4">
+        <div class="flex flex-col">
+            <h1 class="text-[25px] text-slate-800 font-bold">Customers</h1>
+            <span class="text-[12px] text-slate-700">All customer Info</span>
+        </div>
+        <div class="flex items-center justify-end">
+            <div class="search flex items-center justify-center border rounded-md px-3 overflow-hidden">
+                <input type="text" class="search-field text-center w-[200px] h-[40px] outline-none text-[13px]"
+                    placeholder="Search Customer">
+                <i class="fa fa-search text-slate-400" aria-hidden="true"></i>
+            </div>
+            <button id="new-customer-btn"
+                class="flex btn bg-default text-white items-center justify-center border border-gray-300 h-[40px] px-3 ml-2 rounded-md text-[12px]">
+                <i class="fa fa-plus mr-2" aria-hidden="true"></i>
+                New Customer
+            </button>
+        </div>
+    </div>
+    <!-- bills table -->
+    <div class="w-full customer-table table mt-5 text-[13px] bg-slate-50 pb-5 rounded-b-md relative min-h-[400px]">
+        <!-- fetct loader -->
+        <div
+            class="fetch-loader absolute top-0 left-0 w-full min-h-[400px] bg-white rounded-md flex items-center justify-center flex-col">
+            <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                role="status">
+            </div>
+            <h4 class="mt-4 font-semibold">Fetching Data</h4>
+        </div>
+        <!-- fetct loader -->
+        <div
+            class="w-full tr grid grid-cols-16 h-[50px] bg-default text-white rounded-t-md overflow-hidden text-[13px] gap-x-4">
+            <div class="th flex items-center justify-start justify-center h-full w-full">
+                <input type="checkbox" name="" id="all_bills_selector" class="accent-default ml-3">
+            </div>
+            <div class="th flex items-center h-full w-full col-span-1">Sn</div>
+            <div class="th flex items-center h-full w-full col-span-2">Code</div>
+            <div class="th flex items-center h-full w-full col-span-2">Account No</div>
+            <div class="th flex items-center h-full w-full col-span-2">First Name</div>
+            <div class="th flex items-center h-full w-full col-span-2">Middle Name</div>
+            <div class="th flex items-center h-full w-full col-span-2">Last Name</div>
+            <div class="th flex items-center h-full w-full col-span-2">Contact</div>
+            <div class="th flex items-center h-full w-full col-span-2">Actions</div>
+        </div>
+        <div
+            class="tbody customer_rows w-full mt-1 max-h-[400px] pb-3 pr-2 overflow-hidden overflow-y-auto text-[12px]">
+        </div>
+    </div>
+    <!-- bills table -->
+    <!-- Bills totals -->
+    <div class="w-full flex items-center justify-between min-h-[80px] border-t border-t-3 mt-4">
+        <div class="flex items-center justify-center flex-row text-[12px] text-slate-700">
+            <div class="flex items-center justify-start">
+                <strong class="">Total Rows: </strong>
+                <span class="total_customer_rows mx-2">0</span>
+            </div>
+        </div>
+    </div>
+    <!-- Bills totals -->
+</div>
+
+<!-- Modal Background -->
+<div style="visibility: hidden;" method="post"
+    class="customer-modal new-customer-modal fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+    <!-- Modal Content -->
+    <form id="customer-form" submission_type="new-addition"
+        class="bg-white min-h-[60vh] rounded p-5 w-[60%] mx-20 shadow-lg overflow-y-auto relative">
+        <!-- submission-wrapper -->
+        <div
+            class="loader-cover hidden absolute w-full h-full bg-black/30 top-0 left-0 flex items-center justify-center">
+            <div
+                class="w-[400px] h-[300px] bg-white rounded-md shadow-defaults flex items-center justify-center flex-col">
+                <div class="submission-loader text-center">
+
+                    <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                        role="status">
+                    </div>
+                </div>
+                <h4 class="text-black font-semibold text-[18px] mt-3 submission-text">Submitting</h4>
+            </div>
+        </div>
+        <!-- submission-wrapper -->
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center mb-4 border-b pb-5">
+            <h2 class="text-xl font-semibold form-title">Add New Customer</h2>
+            <button class="close-customer-modal text-gray-500 hover:text-gray-700">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <!-- Modal Body -->
+        <div class="p-4 w-full grid grid-cols-2 gap-4">
+            <input id="id" type="hidden" placeholder="Code" class="border rounded p-2 w-full text-[12px]">
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">Code *</label>
+                <input id="code" type="text" placeholder="Code" class="border rounded p-2 w-full text-[12px]" required>
+            </div>
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">Account No *</label>
+                <input id="account_no" type="text" placeholder="Account No"
+                    class="border rounded p-2 w-full text-[12px]" required>
+            </div>
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">First Name *</label>
+                <input id="firstname" type="text" placeholder="First Name" class="border rounded p-2 w-full text-[12px]"
+                    required>
+            </div>
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">Middle Name</label>
+                <input id="middlename" type="text" placeholder="Middle Name"
+                    class="border rounded p-2 w-full text-[12px]">
+            </div>
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">Last Name</label>
+                <input id="lastname" type="text" placeholder="Last Name" class="border rounded p-2 w-full text-[12px]">
+            </div>
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">Contact Number *</label>
+                <input id="phonenumber" type="text" placeholder="Contact No"
+                    class="border rounded p-2 w-full text-[12px]" required>
+            </div>
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">Sex</label>
+                <!-- <input id="sex" type="text" placeholder="Sex" class="border rounded p-2 w-full text-[12px]"> -->
+                <select id="sex" class="border rounded p-2 w-full text-[12px]">
+                    <option value="">Select Sex</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">NRC</label>
+                <input id="nrc" type="text" placeholder="NRC" class="border rounded p-2 w-full text-[12px]">
+            </div>
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">D.O.B</label>
+                <input id="dob" type="date" placeholder="D.O.B" class="border rounded p-2 w-full text-[12px]">
+            </div>
+            </di>
+            <!-- Modal Footer (optional) -->
+            <div class="mt-4 flex justify-end mt-10 pt-5 border-t col-span-2">
+                <button
+                    class="close-customer-modal bg-gray-100 hover:bg-gray-200 w-[150px] text-[13px] text-gray-700 font-semibold py-2 px-4 rounded">
+                    Close
+                </button>
+                <button id="submit-customer-btn" type="submit"
+                    class="bg-default hover:bg-default/90   w-[150px] text-[13px] text-white font-bold py-2 px-4 rounded mx-2"><i
+                        class="fa fa-paper-plane mr-2"></i>
+                    <span>Submit</span>
+                </button>
+            </div>
+    </form>
+</div>

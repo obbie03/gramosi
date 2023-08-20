@@ -10,7 +10,7 @@ class Client {
         this.banks = []
         this.cc = []
         this.coa = []
-        this.baseUrl = 'http://localhost/gramosiBackend'
+        this.baseUrl = 'http://localhost:8888/gramosi/gramosiBackend'
         this.uid = 1
         this.init_print_format()
         this.getGen()
@@ -129,7 +129,7 @@ class Client {
                     `
             var count = 1
             bill.map((res) => {
-                
+
                 out += `<tr class="${count % 2 === 0 ? 'bg-gray-100' : 'bg-white'}">
                             <td class="px-4 py-2 border">${count++}</td>
                             <td class="px-4 py-2 border">${this.useWanted(this.coa, res.coa_id).name}</td>
@@ -294,7 +294,7 @@ class Client {
     //init_settings page
     init_settings() {
         const cls = this
-        
+
         $('.settings-menu').click(function (e) {
             e.preventDefault()
             $('.settings-menu').removeClass('active')
@@ -304,9 +304,9 @@ class Client {
                 if (resolve.status) {
                     $('.settings-container').html(resolve.data)
                     if (url.includes('uploads')) {
-                        
+
                     }
-                   
+
                 }
             })
         })
@@ -501,6 +501,12 @@ class Client {
                 if (url.includes('bills.html')) {
                     this.populate_bills_rows()
                 }
+                if (url.includes('customer.html')) {
+                    this.init_customer()
+                }
+                if (url.includes('property.html')) {
+                    this.init_property()
+                }
                 if (url.includes('receipts.html')) {
                     this.populate_receipt_table()
                 }
@@ -510,7 +516,7 @@ class Client {
                 if (url.includes('settings/settings.html')) {
                     this.init_settings()
                 }
-                
+
             }
         })
     }
@@ -520,7 +526,7 @@ class Client {
             if (res.status) {
                 var data = this.mergeArr(res.data.bills, res.data.recs).sort((a, b) => new Date(a.date) - new Date(b.date))
                 let debits = 0, credits = 0
-       
+
                 data.map((r, i) => {
                     debits += (r[1][0] == 'R' ? parseFloat(r.amount) : 0)
                     credits += (r[1][0] == 'I' ? parseFloat(r.amount) : 0)
@@ -588,9 +594,9 @@ class Client {
                         customer: `${data[0].firstname} ${data[0].lastname}`,
                         debit: this.sumOfArray(data2.map(res => parseFloat(res.amount))),
                         credit: this.sumOfArray(data.map(res => parseFloat(res.total_amount))),
-                        balance:this.sumOfArray(data.map(res => parseFloat(res.balance)))
+                        balance: this.sumOfArray(data.map(res => parseFloat(res.balance)))
                     }
-                    
+
                     $('.tb-body').append(`
                         <div class="w-full tr grid grid-cols-16 h-[40px] border-b rounded-t-md overflow-hidden text-[13px] gap-x-4">
                         <span row='${JSON.stringify(obj)}' class="row_object hidden"></span>
@@ -644,6 +650,221 @@ class Client {
                 this.enabl_filters('.tb-table', 'report')
             }
 
+        })
+    }
+    // init customer page
+    init_customer() {
+        const cls = this
+        $('#new-customer-btn').click(function (e) {
+            e.preventDefault();
+            $(this).attr('submission_type', 'new-addition')
+            $('.customer-modal').css('visibility', 'visible')
+            $('.form-title').text("Add New Customer")
+            $('#customer-form').trigger('reset')
+        })
+        $('.close-customer-modal').click(function (e) {
+            e.preventDefault();
+            $('.customer-modal').css('visibility', 'hidden')
+        })
+        $('#customer-form').submit(function (e) {
+            e.preventDefault()
+            let data = { submission_type: $(this).attr('submission_type') }
+            $(this).find('input').map((i, row) => {
+                data[$(row).attr('id')] = $(row).val()
+            })
+            $('.loader-cover').removeClass('hidden').addClass('flex')
+            $('.submission-text').removeClass('text-red-700')
+            cls.postData(`${cls.baseUrl}/customer.php`, data, (response) => {
+                let res_text = response.msg
+                $('.submission-loader').addClass('hidden')
+                if (response.status == true) {
+                    $('#customer-form').trigger('reset')
+                    cls.populate_customer_rows()
+                }
+                else {
+                    res_text = response.error
+                    $('.submission-text').addClass('text-red-700')
+                }
+                $('.submission-text').text(res_text)
+                setTimeout(() => {
+                    $('.loader-cover').addClass('hidden')
+                    $('.submission-loader').removeClass('hidden')
+                    $('.submission-text').text("Submitting!")
+                }, 3000);
+            })
+        })
+        // populate the customer table
+        this.populate_customer_rows()
+    }
+    // populate customer rows
+    // fetching bills table
+    async populate_customer_rows() {
+        const cls = this
+        this.fetch_data(this.baseUrl + '/customer.php?allcustomers=1').then(resolve => {
+            let total_rows = 0
+            if (resolve.status) {
+                let rows = ''
+                $('.customer_rows').empty()
+                $('.fetch-loader').remove('flex').addClass('hidden')
+                resolve.data.length > 0 && resolve.data.map((row, i) => {
+                    total_rows += 1
+                    rows += `
+                        <div class="w-full tr grid grid-cols-16 h-[50px] border-b text-[13px] gap-x-4">
+                            <span class="row_object hidden" row='${JSON.stringify(row)}'></span>
+                                <div class="th flex items-center justify-start justify-center h-full w-full">
+                                    <input type="checkbox" name="" id="all_bills_selector" class="accent-default ml-3">
+                                </div>
+                                <div class="th flex items-center h-full w-full col-span-1">${i + 1}</div>
+                                <div class="th flex items-center h-full w-full col-span-2">${row.code}</div>
+                                <div class="th flex items-center h-full w-full col-span-2">${row.account_no}</div>
+                                <div class="th flex items-center h-full w-full col-span-2">${row.firstname}</div>
+                                <div class="th flex items-center h-full w-full col-span-2">${row.middlename}</div>
+                                <div class="th flex items-center h-full w-full col-span-2">${row.lastname}</div>
+                                <div class="th flex items-center h-full w-full col-span-2">${row.phonenumber}</div>
+                                <div class="th flex items-center h-full w-full col-span-2 w-full">
+                                    <button class="view-customer text-[12px] w-[150px] h-[30px] border rounded-md flex items-center justify-center">
+                                        <i class="fa fa-eye mr-2" aria-hidden="true"></i>
+                                        View Customer
+                                    </button>
+                                </div>
+                            </div>
+                    
+                    `
+                })
+                $('.customer_rows').html(rows)
+                $('.total_customer_rows').text(total_rows)
+                $('.view-customer').click(function () {
+                    const row = JSON.parse($(this).parents('.tr').find('.row_object').attr('row'))
+                    $('.form-title').text("Customer Information")
+                    $('#customer-form').attr('submission_type', 'update')
+                    $('.customer-modal').css({ visibility: 'visible' })
+                    $('.customer-modal form').find('input').map((i, inp) => {
+                        $(inp).val(row[$(inp).attr('id')])
+                    })
+                    $('#submit-customer-btn span').text('Update Info')
+                })
+                // enable filters
+                this.enabl_filters('.customer-table', 'table')
+            }
+            else {
+                console.log("An error occurred")
+            }
+        })
+
+        // TO SUBMIT THE CUSTOMER DETAILS
+    }
+
+    // initialize property
+    init_property() {
+        const cls = this
+        $('#new-property-btn').click(function (e) {
+            e.preventDefault();
+            $(this).attr('submission_type', 'new-addition')
+            $('.property-modal').css('visibility', 'visible')
+            $('.form-title').text("Add New property")
+            $('#property-form').trigger('reset')
+        })
+        $('.close-property-modal').click(function (e) {
+            e.preventDefault();
+            $('.property-modal').css('visibility', 'hidden')
+        })
+        $('#property-form').submit(function (e) {
+            e.preventDefault()
+            let data = { submission_type: $(this).attr('submission_type') }
+            $(this).find('input,select').map((i, row) => {
+                data[$(row).attr('id')] = $(row).val()
+            })
+            $('.loader-cover').removeClass('hidden').addClass('flex')
+            $('.submission-text').removeClass('text-red-700')
+            cls.postData(`${cls.baseUrl}/property.php`, data, (response) => {
+                let res_text = response.msg
+                $('.submission-loader').addClass('hidden')
+                if (response.status == true) {
+                    $('#property-form').trigger('reset')
+                    cls.populate_property_rows()
+                }
+                else {
+                    res_text = response.error
+                    $('.submission-text').addClass('text-red-700')
+                }
+                $('.submission-text').text(res_text)
+                setTimeout(() => {
+                    $('.loader-cover').addClass('hidden')
+                    $('.submission-loader').removeClass('hidden')
+                    $('.submission-text').text("Submitting!")
+                }, 3000);
+            })
+        })
+        this.populate_property_rows()
+    }
+
+    //fetching property table
+    async populate_property_rows() {
+        const cls = this
+        this.fetch_data(this.baseUrl + '/property.php?property=1').then(resolve => {
+            this.total_unpaid = 0
+            this.total_rows = 0
+            $('.fetch-loader').remove('flex').addClass('hidden')
+            if (resolve.status) {
+                let rows = ''
+                const
+                    types = resolve.data?.property_type,
+                    coas = resolve.data?.coa,
+                    property = resolve.data?.property,
+                    customers = resolve.data?.customers?.sort();
+                $('#coa_id').empty().html('<option value="">Select COA</option>')
+                $('#type_id').empty().html('<option value="">Select Customer</option>')
+                types?.length > 0 && types.map(pt => $('#type_id').append(`<option value="${pt.id}">${pt.name}</option>`))
+                coas?.length > 0 && coas.map(acc => $('#coa_id').append(`<option value="${acc.id}">${acc.name}</option>`))
+                customers?.length > 0 && customers.map(c => $('#c_id').append(`<option value="${c.id}">${c.firstname} ${c.lastname}</option>`))
+                property?.length > 0 && property.map((row, i) => {
+                    this.total_rows += 1
+                    this.total_unpaid += parseFloat(row.amount)
+                    const r = { "full_names": `${row.firstname} ${row.lastname}`, ...row }
+                    rows += `
+                        <div class="w-full tr grid grid-cols-16 h-[50px] border-b text-[12px] gap-x-4">
+                            <span class="row_object hidden" row='${JSON.stringify(r)}'></span>
+                                <div class="th flex items-center justify-start justify-center h-full w-full">
+                                    <input type="checkbox" name="" id="all_bills_selector" class="accent-default ml-3">
+                                </div>
+                                <div class="th flex items-center h-full w-full col-span-1">${i + 1}</div>
+                                <div class="th flex items-center h-full w-full col-span-2">${row.name}</div>
+                                <div class="th flex items-center h-full w-full col-span-2">${r.full_names}</div>
+                                <div class="th flex items-center h-full w-full col-span-2">${row.property_type}</div>
+                                <div class="th flex items-center h-full w-full col-span-2">${row.plot}</div>
+                                <div class="th flex items-center h-full w-full col-span-2">${row.location}</div>
+                                <div class="th flex items-center h-full w-full col-span-2">${row.town}</div>
+                                <div class="th flex items-center h-full w-full col-span-2 w-full">
+                                    <button class="view-property text-[12px] w-[150px] h-[30px] border rounded-md flex items-center justify-center">
+                                        <i class="fa fa-eye mr-2" aria-hidden="true"></i>
+                                        View Property
+                                    </button>
+                                </div>
+                            </div>
+                    
+                    `
+                })
+                $('.property_rows').html(rows)
+                $('.total_property_rows').text(this.total_rows)
+                $('.view-property').click(function () {
+                    const row = JSON.parse($(this).parents('.tr').find('.row_object').attr('row'))
+                    $('.form-title').text("Property Information")
+                    $('#property-form').attr('submission_type', 'update')
+                    $('.property-modal').css({ visibility: 'visible' })
+                    $('.property-modal form').find('input').map((i, inp) => {
+                        $(inp).val(row[$(inp).attr('id')])
+                    })
+                    $('#type_id').val(row.type_id)
+                    $('#coa_id').val(row.coa_id)
+                    $('#c_id').val(row.owner_id)
+                    $('#submit-property-btn span').text('Update Info')
+                })
+                // enable filters
+                this.enabl_filters('.property-table', 'table')
+            }
+            else {
+                console.log("An error occurred")
+            }
         })
     }
 
@@ -859,7 +1080,7 @@ class Client {
             }
         });
     }
-    async getGen(){
+    async getGen() {
         $.getJSON(this.baseUrl + '/general.php?getgen=1', (response) => {
             this.sof = response.sof
             this.banks = response.banks
@@ -906,6 +1127,6 @@ class Client {
             reader.readAsBinaryString(file);
         });
     }
-    
+
 }
 const client = new Client()
