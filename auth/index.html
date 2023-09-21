@@ -12,18 +12,20 @@
 </head>
 
 <body>
+    <div id="alert"></div>
     <div class="w-full h-screen bg-default flex items-center justify-center">
         <form
+            id="loginDiv"
             class="w-[500px] h-[600px] flex items-center justify-center flex-col bg-lightgray rounded-lg p-10 text-slate-700">
             <img src="../img/logo.png" class="w-[130px] object-contain" alt="">
             <h3 class="text-[30px] font-bold">Authenticate</h3>
             <small class="my-5 w-full">Provide your login credentials to get signed into the system</small>
             <div class="w-full text-[13px] mb-3">Email Address</div>
-            <input type="email" name="" id=""
+            <input type="email" name="lemail" id="lemail"
                 class="w-full h-[50px] h-10 px-3 bg-white rounded-md text-[13px]  border border-slate-300"
                 placeholder="Enter your Email" required>
             <div class="w-full text-[13px] my-3">Password</div>
-            <input type="password" name="" id=""
+            <input type="password" name="lpassword" id="lpassword"
                 class="w-full h-[50px] h-10 px-3 bg-white rounded-md text-[13px] border border-slate-300"
                 placeholder="Enter your password" required>
             <button
@@ -41,5 +43,25 @@
 </body>
 <script src="../js/jquery.js"></script>
 <script src="../js/client.js"></script>
+<script>
+    $('#loginDiv').on('submit', function(e){
+        e.preventDefault()
+        var fd = {
+            lpassword:$('#lpassword').val(),
+            lemail:$('#lemail').val()
+        }
+        client.postData(client.baseUrl+'/users.php', fd, (response)=>{
+            if(response.status == 200){
+                client.setCookie('sysuid', response.uid, 1)
+                client.checkLoggedIn()
+                location.href = '../client';
+            }else{
+                client.ourAlert(response.message, 2)
+            }
 
+        })
+
+    })
+
+</script>
 </html>

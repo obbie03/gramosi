@@ -22,7 +22,7 @@
             onclick="$('.payModal').css('visibility', 'visible')"
             class="flex items-center justify-center border border-gray-300 h-[40px] px-3 ml-2 rounded-md text-[12px]">
             <i class="fa fa-plus mr-2" aria-hidden="true"></i>
-            New Receipt
+            New
         </button>
         </div>
     </div>
@@ -94,25 +94,29 @@
             <hr class="my-4">
             <div class="grid grid-cols-2 gap-4">
                 <div>
+                    <select id="budget" class="border rounded p-2 w-full mb-4">
+                    </select>
                     <select id="exType" class="border rounded p-2 w-full mb-4">
- 
                     </select>
                 </div>
                 <div>
-                    <select id="cashType" class="border rounded p-2 w-full mb-4">
-                        <option value="">Select type</option>
-                        <option value="income">Income</option>
-                        <option value="expense">Expense</option>
-                    </select>
+                    <input id="cashType" type="hidden">
+                    <select id="cashBook" class="border rounded p-2 w-full mb-4"></select>
+                    <select id="cashSof" class="border rounded p-2 w-full mb-4"></select>
+                </div>
+                <div>
+                    <input id="chequeno" type="text" placeholder="cheque number" class="border rounded p-2 w-full mb-4">
+                    <select id="Expaye" class="border rounded p-2 w-full mb-4"></select>
                 </div>
                 <div>
                     <input id="Examount" type="text" placeholder="amount" class="border rounded p-2 w-full mb-4">
+                    <input type="date" id="exDate" class="border rounded p-2 w-full mb-4">
                 </div>
                 <div>
-                    <input id="Expaye" type="text" placeholder="Enter payee" class="border rounded p-2 w-full mb-4">
+                    <textarea id="Exdesc" cols="30" rows="" placeholder="description" class="border rounded p-2 w-full mb-4"></textarea>
                 </div>
             </div>
-            <textarea id="Exdesc" cols="30" rows="" placeholder="description" class="border rounded p-2 w-full mb-4"></textarea>
+            
             <hr class="my-4">
           </div>
           <!-- Modal Footer (optional) -->
@@ -126,82 +130,10 @@
     </div>
 </div>
 
+<script src="../js/bills.js"></script>
+
           
 
-          <script>
-
-            function getCash(){
-                $.getJSON(client.baseUrl+'/cash.php?cash', (response)=>{
-                    var cash = client.mergeArr(response.expenses, response.payments).sort((a,b)=> new Date(a.date) - new Date(b.date))
-                    var out = ``
-                    var debs = 0.0
-                    var creds = 0.0
-                    var count = 1
-                    cash.map((res)=>{
-                        debs += res.coa_id == undefined || res.type == 'income'?parseFloat(res.amount):0
-                        creds += res.type!=undefined && res.type == 'expense'?parseFloat(res.amount):0
-                        out += ` <div class="w-full tr grid grid-cols-16 h-[60px] border-b text-slate-700 gap-x-4">
-                            <span class="row_object hidden" row="${JSON.stringify(res)}"></span>
-                            <div class="th flex items-center justify-center h-full w-full col-span-1">
-                                <input type="checkbox" name="" id="" class="accent-default">
-                            </div>
-                            <div class="th flex items-center h-full w-full col-span-1">
-                                <div class="flex items-center justify-center bg-default rounded-full text-white w-5 h-5 font-bold"> ${count++}</div>
-                            </div>
-                            <div class="th flex items-center h-full w-full col-span-2">${res[1]}</div>
-                            <div class="th flex items-center h-full w-full col-span-2">${res.date.substring(0,10)}</div>
-                            <div class="th flex items-center h-full w-full col-span-2">${res.description}</div>
-                            <div class="th flex items-center h-full w-full col-span-2">${client.format_amount(res.coa_id == undefined || res.type == 'income'?parseFloat(res.amount):0)}</div>
-                            <div class="th flex items-center h-full w-full col-span-2">${client.format_amount(res.type!=undefined && res.type == 'expense'?parseFloat(res.amount):0)}</div>
-                            <div class="th flex items-center h-full w-full col-span-2">
-                                <button
-                                title="${res.id}" id="${res.chq}"
-                                    class="wanaShowBill flex items-center justify-center border border-gray-300 w-full h-[30px] rounded-md text-[12px]">
-                                    <i class="fa fa-eye mr-2" aria-hidden="true"></i>
-                                    View
-                                </button>
-                            </div>
-                        </div>`
-                    })
-                    $('.bills_rows').html(out)
-                    $('.total_bill_rows').text(count)
-                    $('.total_bill_outstanding').text(client.format_amount(debs))
-                    $('.total_bill_paying').text(client.format_amount(creds))
-                    $('.total_bill_cash').text(client.format_amount(debs-creds))
-                })
-            }
-        getCash()
-        $('#exType').html(client.makeSels(client.coa, 'COA', 0, 'name'))
-        $('#submitPayBtn').click(function(e){
-            e.preventDefault()
-            $(this).prop('disabled', true)
-            
-            if($('#exType').val().length == 0 || $('#Examount').val().length == 0 || $('#cashType').val().length == 0 || $('#Expaye').val().length == 0){
-                ourAlert('Ensure to enter required fields',2)
-                return
-            }
-            var data = {
-                exType:$('#exType').val(),
-                Examount:$('#Examount').val(),
-                Exdesc:$('#Exdesc').val(),
-                cashType:$('#cashType').val(),
-                Expaye:$('#Expaye').val()
-            }
-            client.postData(client.baseUrl+'/cash.php', data, (response)=>{
-                if(response.status == 200){
-                    client.ourAlert(response.msg, 1)
-                    $('#exType').val('')
-                    $('#Examount').val('')
-                    $('#Exdesc').val('')
-                    $('#cashType').val('')
-                    $('#Expaye').val('')
-                    getCash()
-                }else{
-                    client.ourAlert(response.msg, 2)
-                }
-                $(this).prop('disabled', false)
-            })  
-        })
-          </script>
+  
   
   

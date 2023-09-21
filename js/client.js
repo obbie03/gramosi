@@ -10,12 +10,18 @@ class Client {
         this.banks = []
         this.cc = []
         this.coa = []
-        this.baseUrl = 'http://localhost:8888/gramosi/gramosiBackend'
+        this.budget = []
+        this.dept = []
+        this.project = []
+        this.suppliers = []
+        this.sub = []
+        this.prog = []
+        this.cust = []
+        this.baseUrl = 'http://localhost/gramosiBackend'
         this.uid = 1
         this.init_print_format()
-        this.getGen()
+        this.getGen()  
     }
-
 
     format_amount = (amount, decimals = 2, currency = 'ZMW') => {
         return new Intl.NumberFormat(currency, {
@@ -412,7 +418,6 @@ class Client {
         }
 
     }
-
     //select option
     makeSels = (arr, name, key, item) => {
         var out = '<option value="">Select ' + name + '</option>'
@@ -421,7 +426,6 @@ class Client {
         })
         return out;
     }
-
     // to export the active report
     export_report() {
         const report_table = $(`.${$('.report-menu.active').attr('for')}`)
@@ -516,7 +520,6 @@ class Client {
                 if (url.includes('settings/settings.html')) {
                     this.init_settings()
                 }
-
             }
         })
     }
@@ -872,6 +875,7 @@ class Client {
     async populate_bills_rows() {
         const cls = this
         this.fetch_data(this.baseUrl + '/bills.php?bills=1').then(resolve => {
+            console.log(resolve.data)
             this.total_unpaid = 0
             this.total_rows = 0
             if (resolve.status) {
@@ -1086,6 +1090,13 @@ class Client {
             this.banks = response.banks
             this.cc = response.cc
             this.coa = response.coa
+            this.budget = response.budget
+            this.dept = response.dept
+            this.prog = response.prog
+            this.project = response.head
+            this.sub = response.sub
+            this.suppliers = response.suppliers
+            this.cust = response.cust
         })
     }
     makeUniq = (arr) => {
@@ -1108,6 +1119,40 @@ class Client {
     }
     loader = () => {
         return `<div class="flex justify-center"><i class=" text-default fa fa-spinner fa-3x fa-spin"></i></div>`
+    }
+
+    setCookie(name, value, days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Calculate expiration date
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    }
+
+    checkCookie(name) {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.indexOf(name + '=') === 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    getCookie(name) {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.indexOf(name + '=') === 0) {
+                return cookie.substring(name.length + 1);
+            }
+        }
+        return null;
+    }
+    
+
+    checkLoggedIn(){
+        this.checkCookie('sysuid')?this.uid = this.getCookie('sysuid'):location.href='/auth'
     }
 
     readExcelFile(file) {
