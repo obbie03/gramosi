@@ -1,0 +1,145 @@
+<div class="w-full">
+
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4"> Income Statement</h1>
+        <table id="detailed-income-statement" class="w-full g-table">
+            <thead class="bg-default text-white">
+                <tr>
+                    <th>Item</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Total Revenue</th>
+                    <th id="total-revenue"></th>
+                </tr>
+                <tr>
+                    <th>Total Expenses</th>
+                    <th id="total-expenses"></th>
+                </tr>
+                <tr>
+                    <th>Surplus(Deficit)</th>
+                    <th id="net-income"></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+
+</div>
+
+<script>
+
+function displayDetailedIncomeStatement(data) {
+            let totalRevenue = 0;
+            let totalExpenses = 0;
+            let totalGrossProfit = 0;
+
+            // Clear previous data
+            $('#detailed-income-statement tbody').empty();
+
+            $('#detailed-income-statement tbody').append(`
+                    <tr class="bg-gray-500">
+                        <td>Revenue</td>
+                        <td></td>
+                    </tr>
+                `);
+            data.filter(a=>a.type == 'revenue').forEach(item => {
+                $('#detailed-income-statement tbody').append(`
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.amount}</td>
+                    </tr>
+                `);
+                if (item.type === 'revenue') {
+                    totalRevenue += item.amount;
+                } else if (item.type === 'expense') {
+                    totalExpenses += item.amount;
+                }
+            });
+
+            $('#detailed-income-statement tbody').append(`
+                    <tr class="bg-default text-white">
+                        <td>Total</td>
+                        <td>${totalRevenue.toFixed(2)}</td>
+                    </tr>
+                `);
+
+            $('#detailed-income-statement tbody').append(`
+                    <tr class="bg-gray-500">
+                        <td>Expense</td>
+                        <td></td>
+                    </tr>
+                `);
+
+            data.filter(a=>a.type == 'expense').forEach(item => {
+                $('#detailed-income-statement tbody').append(`
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.amount}</td>
+                    </tr>
+                `);
+                if (item.type === 'revenue') {
+                    totalRevenue += item.amount;
+                } else if (item.type === 'expense') {
+                    totalExpenses += item.amount;
+                }
+            });
+
+            $('#detailed-income-statement tbody').append(`
+                    <tr class="bg-default text-white">
+                        <td>Total</td>
+                        <td>${totalExpenses}</td>
+                    </tr>
+                `);
+
+            // Calculate gross profit
+            totalGrossProfit = totalRevenue - totalExpenses;
+
+            // Display totals
+            $('#total-revenue').text(totalRevenue.toFixed(2));
+            $('#total-expenses').text(totalExpenses.toFixed(2));
+            $('#net-income').text(totalGrossProfit.toFixed(2)); // For simplicity, assuming net income is equal to gross profit
+        }
+
+    
+
+
+
+        var IncomeStatementData = []
+        client.allRepoData.bills.map((res)=>{
+            var obj = {
+                name:client.coa.filter(b=>b.id ==res.coa_id)[0].name,
+                amount:parseFloat(res.amount),
+                type:"revenue" 
+            }
+            IncomeStatementData.push(obj)
+
+        })
+
+        client.allRepoData.supplier.filter(a=>a.type == 1).map((res)=>{
+            var fromcoa = client.sumOfArray(client.allRepoData.journal.filter(a=>a.from_coa == res.coa).map(res=>parseFloat(res.amount)))
+                var tocoa = client.sumOfArray(client.allRepoData.journal.filter(a=>a.to_coa == res.coa).map(res=>parseFloat(res.amount)))
+                        var obj = {
+                            name:client.coa.filter(b=>b.id == res.coa)[0].name,
+                            amount:parseFloat(res.amount) - fromcoa + tocoa ,
+                            type:"expense"
+                        }
+                        IncomeStatementData.push(obj)
+                    })
+        client.allRepoData.journal.map((res)=>{
+                if(!client.allRepoData.supplier.filter(a=>a.type == 1).includes(res.to_coa)){
+                    
+                    var obj = {
+                    name:client.coa.filter(b=>b.id == res.to_coa)[0].name,
+                    amount:parseFloat(res.amount) ,
+                    type:"expense"
+                }
+                IncomeStatementData.push(obj)
+                }
+           })
+        displayDetailedIncomeStatement(IncomeStatementData)
+</script>

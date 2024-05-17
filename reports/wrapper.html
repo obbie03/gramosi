@@ -1,0 +1,63 @@
+<div class="w-full min-h-[500px] h-full  rounded-md p-3">
+    <div class="report-nav w-full flex items-center justify-between text-[12px] bg-white rounded-md h-[60px] px-4">
+        <div class="w-full flex items-center justify-start">
+            <a href="/reports/income_statement.html" for="gl-table" class="report-menu mr-10 font-bold ">
+                Income Statement
+            </a>
+            <a href="/reports/trial_balance.html" for="tb-table" class="report-menu mr-10 font-semibold ">
+                Trial Balance
+            </a>
+            <a href="/reports/cash.html" for="income-statement"
+                class="report-menu mr-10 font-semibold active">
+                Cash
+            </a>
+            <a href="/reports/randp.html" for="income-statement"
+            class="report-menu mr-10 font-semibold active">
+            Receipts and Payments
+        </a>
+            <a href="/reports/balance_sheet.html" for="customer-statement"
+                class="report-menu mr-10 font-semibold">
+                Balance Sheet
+            </a>
+
+            <a href="/reports/bank_rec.html" for="customer-statement"
+                class="report-menu mr-10 font-semibold">
+                Bank Reconcilitation
+            </a>
+        </div>
+        <div class="actions flex items-center justify-between">
+            <button id="export"
+                class="report-action-btn rounded-md w-[120px] h-[30px] hover:bg-gray-200 hover:translate-x-[-3%] transition mr-5 bg-gray-100 flex items-center justify-center border border-gray-300">
+                <i class="fa mr-2 text-indigo-800 fa-table" aria-hidden="true"></i>
+                Export
+            </button>
+            <button id="print"
+                class="report-action-btn rounded-md w-[120px] h-[30px] hover:bg-gray-200 hover:translate-x-[-3%] transition bg-gray-100 flex items-center justify-center border border-gray-300">
+                <i class="fa mr-2 text-indigo-800 fa-print" aria-hidden="true"></i>
+                Print
+            </button>
+        </div>
+    </div>
+    <div class="w-full report-container bg-white mt-7 rounded-md p-5"></div>
+</div>
+
+<script>
+
+    $('a').click(function(e){
+
+        e.preventDefault()
+        console.log($(this).attr('href'))
+        $.get($(this).attr('href'), (response)=>{
+            $('.report-container').html(response)
+        })
+    })
+
+  
+   
+    $.getJSON(client.baseUrl+'/reports.php?tb',(response)=>{
+        client.allRepoData = response
+        })
+
+
+</script>
+

@@ -1,0 +1,208 @@
+<div class="w-full flex items-center justify-start flex-col">
+    <div class="w-full mt-5">
+        <div class="w-full grid grid-cols-3 gap-x-6 min-h-[150px]">
+
+            <div
+                class="card w-full h-full rounded-md shadow-lighter bg-white flex flex-col items-center justify-between p-5">
+                <div class="w-full flex items-center justify-between">
+                    <div class="flex items-center justify-start">
+                        <div class="w-[40px] h-[40px] bg-indigo-300 rounded-lg mr-2 flex items-center justify-center">
+                            <i class="fa fa-bar-chart text-[25px] " aria-hidden="true"></i>
+                        </div>
+                        <span>Total Unpaid Bills</span>
+                    </div>
+                    <h1 class="font-bold text-indigo-800 overrall-outstanding-count">0</h1>
+                </div>
+                <div
+                    class="w-full flex items-center justify-center text-[20px] text-slate-700 font-bold overrall-outstanding-total">
+                    ZMW 0.00
+                </div>
+                <span class="text-slate-600 text-[12px]"> <i class="fa fa-clock-o text-red-600 mr-1"
+                        aria-hidden="true"></i>
+                    <span class="as-at"></span>
+                </span>
+            </div>
+            <div
+                class="card w-full h-full rounded-md shadow-lighter bg-white flex flex-col items-center justify-between p-5">
+                <div class="w-full flex items-center justify-between">
+                    <div class="flex items-center justify-start">
+                        <div class="w-[40px] h-[40px] bg-indigo-300 rounded-lg mr-2 flex items-center justify-center">
+                            <i class="fa fa-credit-card-alt text-[24px]" aria-hidden="true"></i>
+                        </div>
+                        <span>Total Receipted Bills</span>
+                    </div>
+                    <h1 class="font-bold text-emerald-800 receipt-count">0</h1>
+                </div>
+                <div class="w-full flex items-center justify-center text-[20px] text-slate-700 font-bold receipt-total">
+                    ZMW 0.00
+                </div>
+                <span class="text-slate-600 text-[12px]"> <i class="fa fa-clock-o text-red-600 mr-1"
+                        aria-hidden="true"></i>
+                    <span class="as-at"></span>
+                </span>
+            </div>
+            <div
+                class="card w-full h-full rounded-md shadow-lighter bg-white flex flex-col items-center justify-between p-5">
+                <div class="w-full flex items-center justify-between">
+                    <div class="flex items-center justify-start">
+                        <div class="w-[40px] h-[40px] bg-indigo-300 rounded-lg mr-2 flex items-center justify-center">
+                            <i class="fa fa-area-chart text-[30px]" aria-hidden="true"></i>
+                        </div>
+                        <span>Total Linked Properties</span>
+                    </div>
+                    <h1 class="font-bold text-blue-800">0</h1>
+                </div>
+                <div class="w-full flex items-center justify-center text-[20px] text-slate-700 font-bold">
+                    0
+                </div>
+                <span class="text-slate-600 text-[12px]"> <i class="fa fa-clock-o text-red-600 mr-1"
+                        aria-hidden="true"></i>
+                    <span class="as-at"></span>
+                </span>
+            </div>
+
+        </div>
+    </div>
+    <div class="w-full mt-3">
+        <div class="w-full grid grid-cols-2 gap-x-4 min-h-[400px]">
+            <div class="card w-full h-full rounded-md shadow-lighter bg-white p-5">
+                <div class="w-full flex items-center justify-between text-[13px]">
+                    <span class="text-slate-600">Recent Outstanding Bills</span>
+                    <a href="" class="text-indigo-800 view-all-bills">View All <i class="fa fa-long-arrow-right ml-2"
+                            aria-hidden="true"></i></a>
+                </div>
+                <div class="w-full table bg-slate-50 mt-2 pb-5 rounded-md px-2">
+                    <div
+                        class="w-full tr bg-slate-200 rounded-t-md mt-5 h-[50px] grid grid-cols-9 text-[13px] text-slate-700">
+                        <div class="th w-full h-full flex items-center justify-center col-span-1">SN</div>
+                        <div class="th w-full h-full flex items-center col-span-2">Bill No</div>
+                        <div class="th w-full h-full flex items-center col-span-2">Outstanding</div>
+                        <div class="th w-full h-full flex items-center col-span-2">Due Date</div>
+                        <div class="th w-full h-full flex items-center col-span-2">Pay</div>
+                    </div>
+                    <div class="tbody w-full outstanding-body">
+                        <h4 class="w-full font-bold h-[300px] text-slate-400 flex items-center justify-center">No
+                            Records Found</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="card w-full h-full rounded-md shadow-lighter bg-white p-5">
+                <div class="w-full flex items-center justify-between text-[13px]">
+                    <span class="text-slate-600">Recent Receipted</span>
+                    <a href="" class="text-indigo-800 view-all-receipts">View All <i class="fa fa-long-arrow-right ml-2"
+                            aria-hidden="true"></i></a>
+                </div>
+                <div class="w-full table bg-slate-50 mt-2 pb-5 rounded-md px-2">
+                    <div
+                        class="w-full tr bg-slate-200 rounded-t-md mt-5 h-[50px] grid grid-cols-9 text-[13px] text-slate-700">
+                        <div class="th w-full h-full flex items-center justify-center col-span-1">SN</div>
+                        <div class="th w-full h-full flex items-center col-span-2">Bill No</div>
+                        <div class="th w-full h-full flex items-center col-span-2">Paid Amount</div>
+                        <div class="th w-full h-full flex items-center col-span-2">Due Date</div>
+                        <div class="th w-full h-full flex items-center col-span-2">Print Receipt</div>
+                    </div>
+                    <div class="tbody w-full receipts-body"> </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+
+function init_dashboard() {
+        const cls = client
+        $('.as-at').html(`As At ${new Date().toUTCString()}`)
+        client.fetch_data(client.baseUrl + '/bills.php?bills=1').then(resolve => {
+            if (resolve?.data?.length > 0) {
+                let total = 0, count = 0
+                $('.outstanding-body').empty() && resolve.data.map((bill, i) => {
+                    total += parseFloat(bill.amount)
+                    count += 1
+                    if (i < 6) {
+                        $('.outstanding-body').append(`
+                            <div class="w-full tr border-b h-[50px] grid grid-cols-9 text-[13px] text-slate-800">
+                                <div class="td w-full h-full flex items-center justify-center col-span-1">
+                                    <div class="w-[20px] h-[20px] rounded-full bg-default text-white flex items-center justify-center">
+                                        ${i + 1}
+                                    </div>
+                                </div>
+                                <div class="td w-full h-full flex items-center col-span-2">${bill.invoice_no}</div>
+                                <div class="td w-full h-full flex items-center col-span-2 text-red-700">
+                                    ${client.format_amount(bill.amount)}
+                                </div>
+                                <div class="td w-full h-full flex items-center col-span-2">${client.convert_date(bill.date.split(' ')[0])}</div>
+                                <div class="td w-full h-full flex items-center col-span-2">
+                                    <button id="${bill.id}" title="${bill.amount}" class="pay-bill w-full h-[30px] bg-gray-200 text-slate-700 rounded-md">Pay</button>
+                                </div>
+                            </div>
+                        `)
+                    }
+                })
+                $('.overrall-outstanding-total').text(client.format_amount(total))
+                $('.overrall-outstanding-count').text(count)
+                $('.view-all-bills').click(function (e) {
+                    e.preventDefault()
+                    document.querySelector('.nav-menu-link.bills .nav-menu').click()
+                })
+                $('.view-all-receipts').click(function (e) {
+                    e.preventDefault()
+                    document.querySelector('.nav-menu-link.receipts .nav-menu').click()
+                })
+                $('.pay-bill').click(function () {
+                    document.querySelector('.nav-menu-link.bills .nav-menu').click()
+                    var billid = $(client).attr('id')
+                    var billamount = $(client).attr('title')
+                    setTimeout(() => {
+                        // $('.showBill').css('visibility', 'visible')
+                        cls.showBill(billid, billamount)
+                    }, 2000);
+                })
+            }
+        })
+
+        client.fetch_data(client.baseUrl + '/reciepts.php?receipts').then(resolve => {
+
+            if (resolve?.data?.length > 0) {
+                let total = 0, count = 0
+
+                $('.receipts-body').empty() && resolve?.data.map((rec, i) => {
+                    total += parseFloat(rec.amount)
+                    count += 1
+                    if (i < 6) {
+                        $('.receipts-body').append(`
+                            <div class="w-full tr border-b h-[50px] grid grid-cols-9 text-[13px] text-slate-800">
+                                <div class="td w-full h-full flex items-center justify-center col-span-1">
+                                    <div
+                                        class="w-[20px] h-[20px] rounded-full bg-default text-white flex items-center justify-center">
+                                        ${i + 1}</div>
+                                </div>
+                                <div class="td w-full h-full flex items-center col-span-2">${rec.receipt_no}</div>
+                                <div class="td w-full h-full flex items-center col-span-2 text-indigo-900">
+                                    ${client.format_amount(rec.amount)}
+                                </div>
+                                <div class="td w-full h-full flex items-center col-span-2">${client.convert_date(rec.date.split(' ')[0])}</div>
+                                <div class="td w-full h-full flex items-center col-span-2">
+                                    <button id="${rec.id}" class="w-full print-receipt h-[30px] bg-slate-50 border border-gray-400 text-slate-500 rounded-md">
+                                        Print Receipt
+                                    </button>
+                                </div>
+                            </div>
+                        `)
+                    }
+                })
+                $('.receipt-total').text(client.format_amount(total))
+                $('.receipt-count').text(count)
+                $('.print-receipt').click(function () {
+                    var newTab = window.open(`/client/print_formats/receipt.html?rid=${$(client).attr('id')}`, '_blank');
+                    newTab.focus();
+                })
+            }
+        })
+    }
+
+    init_dashboard()
+
+</script>

@@ -1,0 +1,125 @@
+<div class="w-full ">
+
+    <div class="flex w-full items-center justify-between border-b pb-4">
+        <div class="flex flex-col">
+            <h4 class="text-[20px] text-slate-800 font-bold">Cash</h4>
+        </div>
+        <div class="flex items-center justify-end">
+            <label for="from" class="text-[13px] text-slate-600 mr-2">From</label>
+            <input type="date" id="from"
+                class="w-[220px] from-date border rounded-md  text-slate-700 px-3 h-[40px] outline-none text-[12px]"
+                placeholder="From">
+            <label class="text-[12px] text-slate-600 mx-2">To</label>
+            <input type="date" id="to"
+                class="w-[220px] to-date rounded-md mr-2 text-slate-700 border px-2 h-[40px] outline-none text-[12px]"
+                placeholder="To">
+            
+            <div class="search flex items-center justify-center border rounded-md px-3 overflow-hidden">
+                <input type="text" class="search-field text-center w-[220px] h-[40px] outline-none text-[12px]"
+                    placeholder="Search Content">
+                <i class="fa fa-search text-slate-400" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="w-full gl-table table mt-5 text-[13px] bg-slate-50 rounded-b-md" title="Cash Book">
+        <div id="heading"></div>
+     
+        <table class="g-table">
+        <thead>
+            <tr class="bg-default text-white">
+                <th>Date</th>
+                <th>Voucher</th>
+                <th>Cheque</th>
+                <th>Payee/Payer</th>
+                <th>Remarks</th>
+                <th>Debit</th>
+                <th>Credit</th>
+                <th>Balance</th>
+            </tr>
+        </thead>
+            <tbody id="trows">
+
+            </tbody>
+        </table>
+        
+    </div>
+
+</div>
+
+<script>
+
+    var allCash = []
+    function displayCash(data){
+
+    }
+    function getbf(startDate){
+        var data = allCash.filter(a=> new Date(a.date.substring(0,10))  < startDate)
+        var income = client.sumOfArray(data.filter(a=>a.type == 'income').map(res=> parseFloat(res.amount)))
+        var expense = client.sumOfArray(data.filter(a=>a.type == 'expense').map(res=> parseFloat(res.amount)))
+        return (income - expense)
+    }
+
+    
+
+
+
+    function displayTable(data, bf){
+        var out   = ``
+
+        var totalcredits = 0
+        var totaldebits = 0
+        var balance = bf
+        data.map((obj)=>{
+            var debit = obj.type=='income'?parseFloat(obj.amount):0
+            var credit = obj.type=='expense'?parseFloat(obj.amount):0
+            totalcredits+=credit
+            totaldebits+=debit
+            balance += (debit - credit)
+
+            console.log(obj)
+            out +=  `<tr>
+                        <td>${obj.date.substring(0,10)}</td>
+                        <td>${client.banks.filter(a=>a.id == obj.bank)[0].name.substring(0,2).toUpperCase()}${obj.id}</td>
+                        <td>${obj.cheque}</td>
+                        <td>${obj.paye}</td>
+                        <td>${obj.description}</td>
+                        <td>${client.format_amount(debit)}</td>
+                        <td>${client.format_amount(credit)}</td>
+                        <td>${client.format_amount(balance)}</td>
+                </tr>`
+              
+        })
+
+        out+= `<tr class="bg-default text-white">
+                        <th colspan="5">Total</th>
+                        <th>${client.format_amount(totaldebits)}</th>
+                        <th>${client.format_amount(totalcredits)}</th>
+                        <th>${client.format_amount(balance)}</th>
+                    </tr>`
+        return out
+    }
+
+    $('.to-date').change(function(){
+        
+        var firstDayOfMonth = new Date($('.from-date').val());
+        var bf = getbf(firstDayOfMonth)
+        var data = allCash.filter(a=> (new Date(a.date.substring(0,10)) >= firstDayOfMonth) && (new Date(a.date.substring(0,10)) <= new Date($('.to-date').val())))
+        console.log(data)
+        $('#trows').html(displayTable(data, bf))
+        $('#heading').html(`<span class="font-bold mb-5">Opening balance: ${client.format_amount(bf)}</span>`)
+
+    })
+
+    $.getJSON(client.baseUrl+'/cash.php?cash',(response)=>{
+        allCash = [...response.cash]
+        var currentDate = new Date();
+        var firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+        var bf = getbf(firstDayOfMonth)
+        var data = allCash.filter(a=> new Date(a.date.substring(0,10))  >= firstDayOfMonth)
+        $('#trows').html(displayTable(data, bf))
+        $('#heading').html(`<span class="font-bold mb-5">Opening balance: ${client.format_amount(bf)}</span>`)
+     })
+            
+</script>

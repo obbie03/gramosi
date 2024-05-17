@@ -1,0 +1,48 @@
+.g-table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 25px !important;
+}
+.g-table td{
+    border: 1px solid #eee;
+    padding: 8px;
+}
+
+.g-table th{
+    border: 1px solid #eee;
+    padding: 8px;
+}
+table{
+    border-color: inherit;
+}
+
+#custNameDiv{
+    position: relative;
+    width:100%;
+}
+
+.custNameResp{
+    position: absolute;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    width:100%;
+    text-align: center;
+    padding:10px;
+    display: none;
+}
+
+#alert{
+    position:fixed;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border-radius:10px;
+    width: 50%;
+    top:50px;
+    margin-left:25%;
+    z-index:1000000;
+    padding:10px;
+    display:none;
+    text-align: center;
+    font-weight: 1000;
+}

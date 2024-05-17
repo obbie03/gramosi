@@ -1,0 +1,522 @@
+<div class="w-full bg-white min-h-[400px] rounded-md mt-10 p-5">
+    <div class="flex justify-between">
+        <div class="flex flex-col">
+            <h1 class="text-[25px] text-slate-800 font-bold">Bills</h1>
+            <span class="text-[12px] text-slate-700">All bills listed here</span>
+        </div>
+        <button
+            onclick="$('.billModal').css('visibility', 'visible')"
+            class="flex items-center justify-center border border-gray-300 h-[40px] px-3 ml-2 rounded-md text-[12px]">
+            <i class="fa fa-plus mr-2" aria-hidden="true"></i>
+            New Bill
+        </button>
+    </div>
+
+    <hr>
+
+    <table id="billsTbl" class="g-table">
+        <thead class="bg-default text-white">
+            <tr>
+                <th>Sn</th>
+                <th>Bill No</th>
+                <th>Bill Date</th>
+                <th>Customer</th>
+                <th>Outstanding</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody class="tbody">
+
+        </tbody>
+
+        <tfoot class="bg-default text-white">
+            <tr>
+                <th colspan="4">Overall Total</th>
+                <th colspan="2" id="fut"></th>
+            </tr>
+        </tfoot>
+
+    </table>
+
+</div>
+
+
+<!-- Modal Background -->
+<div style="visibility: hidden;"
+    class="billModal fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+    <!-- Modal Content -->
+    <div style="max-height: 35rem;" class="bg-white rounded p-8 w-full mx-20 shadow-lg overflow-y-auto">
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold">Add new bill</h2>
+            <button onclick="$('.billModal').css('visibility', 'hidden')" class="text-gray-500 hover:text-gray-700">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <!-- Modal Body -->
+        <div class="p-4">
+            <hr class="my-4">
+            <button id="bulkBtn" class="bg-default hover:bg-defaulthover text-white font-bold py-2 px-4 rounded"
+                onclick="client.bulkBilling()">Bulk Billing</button>
+            <hr class="my-4">
+            <div id="custNameDiv" class="mb-4">
+                <input type="text" class="border rounded p-2 w-full" id="custName" placeholder="Customer name">
+                <div class="custNameResp"></div>
+            </div>
+            <div id="custDet"></div>
+            <input type="text" class="hidden border rounded p-2 mb-4" id="uniId" placeholder="Enter unique code">
+            <br>
+            <div class="text-center" id="codeResp"></div>
+            <hr class="my-4">
+            <div class="hidden" id="form">
+                <input type="hidden" id="custIdzz">
+                <select id="sof" class="border rounded p-2 w-full mb-4">
+                    <!-- Options for 'sof' -->
+                </select>
+                <select id="colce" class="border rounded p-2 w-full mb-4">
+                    <!-- Options for 'colce' -->
+                </select>
+
+                <select id="banks" class="border rounded p-2 w-full mb-4">
+                    <!-- Options for 'colce' -->
+                </select>
+                <input id="amount" type="text" placeholder="amount" class="border rounded p-2 w-full mb-4">
+                <textarea id="desc" cols="30" rows="" placeholder="description"
+                    class="border rounded p-2 w-full mb-4"></textarea>
+                <hr class="my-4">
+                <button class="bg-default hover:bg-defaulthover text-white font-bold py-2 px-4 rounded"
+                    onclick="addToList()"><i class="fa fa-plus-circle"></i> Add</button>
+                <hr class="my-4">
+                <div id="listOfPay"></div>
+                <hr class="my-4">
+            </div>
+        </div>
+        <!-- Modal Footer (optional) -->
+        <div class="mt-4 flex justify-end">
+            <button onclick="$('.billModal').css('visibility', 'hidden')"
+                class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold py-2 px-4 rounded">
+                Close
+            </button>
+            <button id="submitBtn"
+                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mx-2"><i
+                    class="fa fa-paper-plane"></i> Submit</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Background -->
+<div style="visibility: hidden;"
+    class="showBill fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+    <!-- Modal Content -->
+    <div style="max-height: 25rem;" class="bg-white rounded p-8 w-full mx-20 shadow-lg overflow-y-auto">
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold">View More</h2>
+            <button onclick="$('.showBill').css('visibility', 'hidden')" class="text-gray-500 hover:text-gray-700">
+                <i class="fa fa-times fa-lg"></i>
+            </button>
+        </div>
+        <!-- Modal Body -->
+        <div class="p-4">
+            <hr>
+            <div class="my-4" id="indet"></div>
+
+            <hr>
+            <input type="hidden" id="iid">
+            <input type="hidden" id="u_id">
+            <input type="hidden" id="inv_id">
+            <div class="my-4">
+
+                <select class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" name="" id="recCred">
+                    <option value="1">Receipt</option>
+                    <option value="2">Credit note</option>
+                </select>
+                
+            </div>
+            <div class="my-4">
+                <input type="text" placeholder="Enter amount" id="recAmount"
+                    class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <div class="my-4">
+                <textarea placeholder="description" id="recDesc" rows="3"
+                    class="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+            </div>
+            <hr>
+        </div>
+        <!-- Modal Footer (optional) -->
+        <div class="mt-4 flex justify-end">
+            <button onclick="$('.showBill').css('visibility', 'hidden')"
+                class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold py-2 px-4 rounded">
+                Close
+            </button>
+            <button id="submitPay"
+                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mx-2"><i
+                    class="fa fa-paper-plane"></i> Submit</button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+function showBill(id, amount){
+        $('#indet').html(client.loader())
+        $('#iid').val(id)
+        
+        
+        $('.showBill').css('visibility', 'visible')
+        $.getJSON(client.baseUrl + '/bills.php?bill=' + id, (response) => {
+            var bill = response.bills
+            var recs = response.recs
+            $('#u_id').val(bill[0].u_id)
+            $('#inv_id').val(bill[0].invoice_no)
+            var out = `<span class="float-right"> <img class="w-[70px] h-[70px] object-contain mr-2" src = 'images/logo.png'> ${bill[0].date.substring(0, 10)}</span>
+                <table class="table border-collapse mb-3">
+                            <tr>
+                                <th class="px-4 py-2 bg-gray-100 border text-left">Customer</th>
+                                <td class="px-4 py-2 border" id="nomerName">${bill[0].firstname} ${bill[0].lastname}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-4 py-2 bg-gray-100 border text-left">Invoice_no</th>
+                                <td class="px-4 py-2 border">${bill[0].invoice_no}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-4 py-2 bg-gray-100 border text-left">Source of fund</th>
+                                <td class="px-4 py-2 border">${client.useWanted(client.sof, bill[0].sof_id).source_of_fund}</td>
+                            </tr>
+                            <tr>
+                                <th class="px-4 py-2 bg-gray-100 border text-left">Collection Center</th>
+                                <td class="px-4 py-2 border">${client.useWanted(client.cc, bill[0].cc_id).collection_name}</td>
+                            </tr>
+                            <tr>
+                            <th class="px-4 py-2 bg-gray-100 border text-left">Collection Center</th>
+                            <td class="px-4 py-2 border">${client.useWanted(client.banks, bill[0].bank).name}</td>
+                        </tr>
+                            <tr>
+                                <th class="px-4 py-2 bg-gray-100 border text-left">Invoice Balance</th>
+                                <td class="px-4 py-2 border">${client.format_amount(amount)}</td>
+                            </tr>
+                        </table>
+                              
+                              <table class="table border-collapse w-full">
+                    <tr>
+                        <th class="px-4 py-2 bg-gray-100 border">Sno</th>
+                        <th class="px-4 py-2 bg-gray-100 border">COA</th>
+                        <th class="px-4 py-2 bg-gray-100 border">Description</th>
+                        <th class="px-4 py-2 bg-gray-100 border">Amount</th>
+                    </tr>
+                    `
+            var count = 1
+            bill.map((res) => {
+
+                out += `<tr class="${count % 2 === 0 ? 'bg-gray-100' : 'bg-white'}">
+                            <td class="px-4 py-2 border">${count++}</td>
+                            <td class="px-4 py-2 border">${client.useWanted(client.coa, res.coa_id).name}</td>
+                            <td class="px-4 py-2 border">${res.description}</td>
+                            <td class="px-4 py-2 border">${client.format_amount(res.amount)}</td>
+                        </tr>`
+            })
+            out += `<tr>
+                        <th class="px-4 py-2 bg-gray-100 border" colspan="3">Total</th>
+                        <th class="px-4 py-2 bg-gray-100 border">${client.format_amount(client.sumOfArray(bill.map((res) => parseFloat(res.amount))))}</th>
+                    </tr>
+                </table>
+                <table class="table border-collapse w-full mt-3">
+                    <tr>
+                        <th class="px-4 py-2 bg-gray-100 border">Sno</th>
+                        <th class="px-4 py-2 bg-gray-100 border">Receipt_no</th>
+                        <th class="px-4 py-2 bg-gray-100 border">Description</th>
+                        <th class="px-4 py-2 bg-gray-100 border">Date</th>
+                        <th class="px-4 py-2 bg-gray-100 border">Amount</th>
+                    </tr>
+                    `
+            var count = 1
+            recs.map((res) => {
+                out += `<tr class="${count % 2 === 0 ? 'bg-gray-100' : 'bg-white'}">
+                            <td class="px-4 py-2 border">${count++}</td>
+                            <td class="px-4 py-2 border">${res.receipt_no}</td>
+                            <td class="px-4 py-2 border">${res.description}</td>
+                            <td class="px-4 py-2 border">${res.date.substring(0, 10)}</td>
+                            <td class="px-4 py-2 border">${client.format_amount(res.amount)}</td>
+                        </tr>`
+            })
+            out += `<tr>
+                        <th class="px-4 py-2 bg-gray-100 border" colspan="4">Total</th>
+                        <th class="px-4 py-2 bg-gray-100 border">${client.format_amount(client.sumOfArray(recs.map((res) => parseFloat(res.amount))))}</th>
+                    </tr>
+                </table>
+                `
+            $('#indet').html(out)
+        })
+    }
+
+function disBill(response){
+        if ($.fn.DataTable.isDataTable('#billsTbl')) {
+            $('#billsTbl').DataTable().clear().destroy();
+        }
+
+
+        try {
+            
+        var count = 1
+        const dataTable = $('#billsTbl').DataTable({
+        data: response,
+        columns: [
+            { data: null, render: (data, type, row, meta) => count++ },
+            { data: 'invoice_no'},
+            { data: null, render: (data, type, row, meta) => `${client.convert_date(row.date.substring(0, 10))}` },
+            { data: null, render: (data, type, row, meta) => `${row.firstname + " " +row.lastname}` },
+            { data: null, render: (data, type, row, meta) => `${client.format_amount(row.amount, 2)}` },
+            {
+                data: 'mode', render: (data, type, row, meta) => {
+                    return `<i onclick="showBill(this.title, this.id)" title="${row.id}" id="${row.amount}" class="fa fa-eye fa-lg text-default mr-2" aria-hidden="true"></i> 
+                     <i onclick="printBill(this.id)" id="${row.id}" class="fa fa-print mr-2 fa-lg text-default print-bill" aria-hidden="true"></i>`;
+                }
+            },
+        
+        ],
+        paging: true,
+        pageLength: 10,
+        lengthMenu: [10, 25, 50, 100],
+        searching: true,
+        footerCallback: function (row, data, start, end, display) {
+                let totalAmount = data.reduce((total, item) => total + parseFloat(item['amount']), 0);
+                let formattedTotal = client.format_amount(totalAmount,2);
+                // $(this.api().table().footer()).html(`<tfoot><tr><th colspan="4">Total:</th><th>${formattedTotal}</th><th colspan="2"></th></tr></tfoot>`);
+                $('#fut').html(formattedTotal)
+            }
+       
+        });
+
+        } catch (error) {
+        console.error('An error occurred while initializing DataTable:', error.message);
+        } 
+
+        }
+
+        $('.tbody').html(client.loader())
+
+        $.getJSON(client.baseUrl + '/bills.php?bills=1', (response)=>{
+            
+            disBill(response)
+        })
+
+       
+ 
+
+        function printBill(id){
+            var newTab = window.open(`/print_formats/bill.html?bid=${id}`, '_blank');
+            newTab.focus();
+
+        }
+$('#submitPay').click(function(){
+  $(this).attr('disabled', true)
+
+  if($('#recAmount').val().length == 0){
+    client.ourAlert('Please ensure to enter amount')
+    return
+  }
+
+  var data = {
+    billID:$('#iid').val(),
+    recUser:client.uid,
+    recAmount:$('#recAmount').val(),
+    recDesc:$('#recDesc').val(),
+    cust:$('#u_id').val(),
+    invno:$('#inv_id').val(),
+    recCred:$('#recCred').val(),
+    custName:document.getElementById('nomerName').innerHTML
+  }
+  client.postData(client.baseUrl+'/bills.php', data, (response)=>{
+      if(response.status == 'done'){
+          client.ourAlert('Successully added', 1)
+          client.populate_bills_rows()
+          $('#recAmount').val('')
+          $('#recDesc').val('')
+          $('.showBill').css('visibility', 'hidden')
+
+      }else{
+        client.ourAlert('Something went wrong', 2)
+      }
+      $(this).attr('disabled', false)
+  })
+})
+   
+function selCust(id, name){
+    console.log(name)
+  $('#custDet').html(name)
+  $('#uniId').slideDown()
+  $('#custIdzz').val(id)
+  $('.custNameResp').slideUp()
+}
+ 
+$('#custName').keyup(function(){
+    console.log(1)
+
+$('.custNameResp').slideDown()
+
+var name = $(this).val()
+
+var out = ``
+$.getJSON(client.baseUrl+'/general.php?custName='+name, (response)=>{
+    console.log(response)
+    response.map((res)=>{
+        out += `<button class="btn w-100" id="${res.u_id}" title="${res.firstname} ${res.lastname}: ${res.account_no}" onclick="selCust(this.id, this.title)">${res.firstname} ${res.lastname}: ${res.account_no}</button><br>`
+    })
+    $('.custNameResp').html(out)
+})
+})
+
+  $('#sof').html(client.makeSels(client.sof, 'source of funds', 0, 2))
+  $('#banks').html(client.makeSels(client.banks, 'cash book', 0, 4))
+  $('#colce').html(client.makeSels(client.cc, 'collection center', 0, 1))
+
+
+function disArr(arr){
+  var out = `
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-50">
+        <tr>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sno.</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Activity</th>
+          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+          <th scope="col" class="relative px-6 py-3"></th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+  `;
+  var count = 0;
+  var total = 0.0;
+  arr.map((res) => {
+    count++;
+    out += `
+      <tr>
+        <td class="px-6 py-4 whitespace-nowrap">${count}</td>
+        <td class="px-6 py-4 whitespace-nowrap">${res.actDesc}</td>
+        <td class="px-6 py-4 whitespace-nowrap">${res.amount}</td>
+        <td class="px-6 py-4 whitespace-nowrap">
+          <i onclick="deletearr(this.title)" title="${count}" class="fa fa-trash text-danger cursor-pointer"></i>
+        </td>
+      </tr>
+    `;
+    total += parseFloat(res.amount);
+  });
+  out += `
+      <tr>
+        <td colspan="2" class="px-6 py-3 text-right text-sm font-medium text-gray-900">Total</td>
+        <td class="px-6 py-3 text-left text-sm text-gray-900">${total}</td>
+        <td class="px-6 py-3"></td>
+      </tr>
+      </tbody>
+    </table>
+  `;
+  return out;
+};
+
+
+var arr = []
+var finOut = ''
+function addToList(){
+  var cashbook = $('#banks').val()
+  var sof = $('#sof').val()
+  var cc = $('#colce').val()
+  var amount = $('#amount').val()
+  var desc = $('#desc').val()
+  var act = $('#codeResp').text().split('~')[2]
+  var actDesc = $('#codeResp').text().split('~')[0]
+  var data = {
+      amount:amount,
+      act:act,
+      actDesc:actDesc
+  }
+  arr.push(data)
+   var out = disArr(arr)
+  $('#listOfPay').html(out)
+finOut = out
+if(arr.length > 0){
+  $('#submitBtn').prop('disabled', false)
+}
+$('#amount').val()
+}
+
+function deletearr(index){
+  arr.splice(index-1,1)
+  var out = disArr(arr)
+  $('#listOfPay').html(out)
+finOut = out
+if(arr.length > 0){
+  $('#submitBtn').prop('disabled', false)
+}
+$('#amount').val()
+}
+$('#uniId').keyup(function(){
+  var val = $(this).val()
+  if(val.length == 6){
+      $.getJSON(client.baseUrl+'/general.php?uniqueId='+val,(response)=>{
+          if(response.length > 0){
+            
+              var out =`${response[0].name}~${response[0].account}~${response[0].id}`
+              $('#codeResp').html(out)
+              $('#codeRespDiv').html(response[0].name)
+              $('#Prog').html(response[0].programme)
+              $('#codeResp').slideDown()
+              $('#form').slideDown()
+          }else{
+            client.ourAlert('Code entered is not valid', 2)
+              $('#codeResp').slideUp()
+              $('#form').slideUp()
+          }
+      })
+  }
+})
+
+$('#submitBtn').click(function(){ 
+  $(this).prop('disabled', true)
+
+  if(arr.length == 0){
+      client.ourAlert('Please ensure activity',2)
+      $(this).prop('disabled', false)
+      return
+  }
+  if($('#sof').val().length == 0 || $('#colce').val().length == 0 || $('#banks').val().length == 0){
+    $(this).prop('disabled', false)
+    client.ourAlert('Please fill in all fields',2)
+    return
+  }
+  var toSend = {
+    uidsingle:client.uid,
+    data:arr,
+    custID:$('#custIdzz').val(),
+    // sof:$('#sof').val(),
+    // cc:$('#colce').val(),
+    // bank:$('#banks').val()
+    sof:1,
+    cc:21,
+    bank:2
+  }
+  client.postData(client.baseUrl+'/bills.php', toSend, (response)=>{
+      if(response.status = 'done'){
+        client.ourAlert('Successfully added', 1);
+        client.populate_bills_rows()
+          arr = []
+          var out = disArr(arr)
+          $('#listOfPay').html(out)
+          $('#recModo').fadeIn()
+          // $('#finOut').html(finOut)
+          // $('#recNum').html(`No:${response.data}`)
+          // $('#dateRec').html(`Date:${today()}`)
+          // $('#custZina').html(`Customer:${$('#custDet').html().split('-')[0]}`)
+          $('.billModal').css('visibility', 'hidden')
+      }else{
+        client.ourAlert('Something went wrong',2);
+      }
+      $(this).prop('disabled', false)
+  })
+})
+
+
+</script>

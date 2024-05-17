@@ -1,0 +1,140 @@
+<div class="w-full bg-white min-h-[400px] rounded-md mt-10 p-5">
+
+    <div class="flex justify-between">
+        <div class="flex flex-col">
+            <h1 class="text-[25px] text-slate-800 font-bold">Journal</h1>
+        </div>
+        <button onclick="$('#slidingDiv').animate({ width: 'toggle' }, 350)"
+        class="flex btn bg-default text-white items-center justify-center border border-gray-300 h-[40px] px-3 ml-2 rounded-md text-[12px]">
+        <i class="fa fa-plus mr-2" aria-hidden="true"></i>
+        Add
+    </button>
+    </div>
+<hr>
+
+
+
+    <table id="budgetTbl" class="g-table">
+        <thead class="bg-default text-white">
+            <tr>
+                <th>Sn</th>
+                <th>Date</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Amount</th>
+                <th>Description</th>
+                <!-- <th>Actions</th> -->
+            </tr>
+        </thead>
+        <tbody class="tbody">
+        </tbody>
+    </table>
+</div>
+
+<div id="slidingDiv" class="bg-white fixed top-0 right-0 h-full w-1/4 overflow-hidden shadow-lg" style="display: none;">
+    <i onclick="$('#slidingDiv').animate({ width: 'toggle' }, 350)" class="fa fa-times p-1 m-1 fa-lg text-red-500 float-right"></i>
+    <h3 class="m-2 font-semibold text-lg custName">Journal</h3>
+    <hr>
+    <div id="form">
+    </div>
+</div>
+
+<script>
+
+ var cnote = `<div class="max-w-md mx-auto bg-white p-8 rounded">
+                <select id="budget" class="border rounded p-2 w-full mb-4"></select>
+                <select id="coa" class="border rounded p-2 w-full mb-4"></select>
+                <input id="amount" type="text" placeholder="amount" class="border rounded p-2 w-full mb-4">
+                <textarea id="desc" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"></textarea>
+                <div class="text-center">
+                <button onclick="subPay()" class="subInv mt-6 bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800">Submit</button>
+                </div>
+            </div>`
+        $('#form').html(cnote)
+
+        $('#budget').select2({
+            placeholder: 'From COA',
+            allowClear: true, 
+            data: client.coa.map(res => ({
+                id: res.id,
+                text: `${res.account}: ${res.name}`
+            }))
+        });
+
+        $('#coa').select2({
+            placeholder: 'To COA',
+            allowClear: true, 
+            data: client.coa.map(res => ({
+                id: res.id,
+                text: `${res.account}: ${res.name}`
+            }))
+        });
+
+        function subPay(){
+        $('.subPay').prop('disabled', true)
+            fd = {
+                    fromcoa:$('#budget').val(),
+                    tocoa:$('#coa').val(),
+                    amount:$('#amount').val(),
+                    desc:$('#desc').val(),
+                   
+                }
+        client.postData(`${client.baseUrl}/journal.php`, fd, (response)=>{
+                if(response.status == 200){
+                    client.ourAlert('Successful', 1)
+                    $('#slidingDiv').animate({ width: 'toggle' }, 350) 
+                }else{
+                    client.ourAlert('Something went wrong', 2)
+                }
+                    $('.subInv').prop('disabled', false)
+            })
+    
+    }
+
+    function displayJ(response){
+        if ($.fn.DataTable.isDataTable('#budgetTbl')) {
+                $('#budgetTbl').DataTable().clear().destroy();
+            }
+            console.log(response)
+            try {
+                
+        var count = 1
+        const dataTable = $('#budgetTbl').DataTable({
+            data: response,
+            columns: [
+            { data: null, render: (data, type, row, meta) => count++ },
+                { data: null, render: (data, type, row, meta) => `${row.date.substring(0,10)}` },
+                { data: null, render: (data, type, row, meta) => `${client.coa.filter(a=>a.id == row.from_coa)[0].name}` },
+                { data: null, render: (data, type, row, meta) => `${client.coa.filter(a=>a.id == row.to_coa)[0].name}` },
+                { data: null, render: (data, type, row, meta) => `${row.amount}` },
+                { data: null, render: (data, type, row, meta) => `${row.description}` },
+                // {
+                //     data: 'mode', render: (data, type, row, meta) => {
+                //         return `<i onclick="print(this.title)" title="${row.id}" id="${row.chq}" onclick="viewBudget(this.title)" title="${row.id}" class="fa fa-print fa-lg text-default mr-2"></i>`;
+                //     }
+                // },
+              
+            ],
+            paging: true,
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100],
+            searching: true,
+            footerCallback: function (row, data, start, end, display) {
+                let totalAmount = data.reduce((total, item) => total + parseFloat(item['amount']), 0);
+                let formattedTotal = client.format_amount(totalAmount);
+                $(this.api().table().footer()).html(`<tfoot><tr><th colspan="4">Total:</th><th>${formattedTotal}</th><th colspan="2"></th></tr></tfoot>`);
+            }
+        });
+
+        } catch (error) {
+            console.error('An error occurred while initializing DataTable:', error.message);
+        } 
+    }
+
+
+    $.getJSON(`${client.baseUrl}/journal.php?all`, (response)=>{
+
+        displayJ(response)
+    })
+
+</script>

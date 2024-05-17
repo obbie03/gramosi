@@ -1,0 +1,178 @@
+<div class="w-full">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4"> Bank Reconcilitation</h1>
+
+
+        <div class="grid grid-cols-2 gap-4 my-3">
+
+            <select class="border rounded p-2 w-full mb-4" id="months"></select>
+            <select class="border rounded p-2 w-full mb-4" id="banks"></select>
+
+        </div>
+
+      
+
+
+        <input type="file" id="upload">
+        <hr>
+        <div id="excelData"></div>
+
+    </div>
+</div>
+
+<script>
+
+    var months = [
+                { month: "January", value: 1 },
+                { month: "February", value: 2 },
+                { month: "March", value: 3 },
+                { month: "April", value: 4 },
+                { month: "May", value: 5 },
+                { month: "June", value: 6 },
+                { month: "July", value: 7 },
+                { month: "August", value: 8 },
+                { month: "September", value: 9 },
+                { month: "October", value: 10 },
+                { month: "November", value: 11 },
+                { month: "December", value: 12 }
+                ]
+
+               $('#months').html(client.makeSels(months, 'month', 'value', 'month')) 
+               $('#banks').html(client.makeSels(client.banks, 'cashbook', 'id', 'name'))
+                
+
+function check(cheq, amount) {
+    return new Promise((resolve, reject) => {
+        $.getJSON(`${client.baseUrl}/reports.php?amount=${amount}&chequeno=${cheq}`, (response) => {
+            resolve(response.status);
+        }).fail((jqxhr, textStatus, error) => {
+            reject(error);
+        });
+    });
+}
+
+
+var cashData = []
+var upData = []
+var missed = []
+
+$('#upload').change(function(e) {
+    const file = e.target.files[0];
+    client.readExcelFile(file)
+        .then(data => {
+            upData = data
+            
+            console.log(data)
+            $.getJSON(`${client.baseUrl}/reports.php?month=${$('#months').val()}&bank=${$('#months').val()}`, (response) => {
+                cashData = response.trans
+
+                cashData.map((res)=>{
+                    if(res.type == "expense"){
+                       var check = data.filter(a=>a.chequeno == res.cheque && a.debit == res.amount).length
+                        if(check == 0){
+                            missed.push({
+                                date:res.date,
+                                cheque:res.cheque,
+                                amount:parseFloat(res.amount),
+                                type:'expense'
+                            })
+                        }   
+                    }
+                    if(res.type == "income"){
+                        var check = data.filter(a=>a.chequeno == res.cheque && a.credit == res.amount).length
+                        if(check == 0){
+                            missed.push({
+                                date:res.date,
+                                cheque:res.cheque,
+                                amount:parseFloat(res.amount),
+                                type:'income'
+                            })
+                        }
+                        }
+                })
+
+
+                
+                var pays = client.sumOfArray(cashData.filter(a=>a.type == 'expense').map(res=>parseFloat(res.amount)))
+                var recs = client.sumOfArray(cashData.filter(a=>a.type == 'income').map(res=>parseFloat(res.amount)))
+
+                $('#excelData').html(disReco(response.cash[0].diff!=null?response.cash[0].diff:0, pays, recs, missed)) 
+
+                console.log(missed)
+
+            })
+
+
+            function disReco(bf, pays, recs, missed){
+
+                var out = `<h3 class="text-2x font-bold">Bank Reconciliation Statement for the Month of ${months.filter(a=>a.value == $('#months').val())[0].month} 2022
+                </h3>`
+
+                out += `<table class="g-table">
+                        <tr><th>Opening Balance as per Cash Book</th><th>${bf}</th></tr>
+                        <tr><th>Add Receipts</th><th>${recs}</th></tr>
+                        <tr><th>Less Payments</th><th>${pays}</th></tr>
+                        <tr><th>Closing Balance as per Cash Book</th><th>${bf+recs-pays}</th></tr>
+                    </table>`
+
+                    var incomes = missed.filter(a=>a.type == 'income')
+                    var expenses = missed.filter(a=>a.type == 'expense')
+
+                    out += `<br>Less Uncredited Deposits:<br>
+                            <table class="g-table">
+                                <tr class="bg-default text-white"><th>Deposit Date</th><th>GRN</th><th>Amount</th></tr>`
+                                incomes.map((res)=>{
+                                    out += `<tr><th>${res.date.substring(0,10)}</th><th>${res.cheque}</th><th>${res.amount}</th></tr>`
+                                })
+                    out += `<tr><th colspan="2">Total Uncredited Deposits</th><th>-${client.sumOfArray(incomes.map(res=>res.amount))}</th></tr></table>`
+
+
+                    out += `<br>Add Unpresented Cheques:<br>
+                            <table class="g-table">
+                                <tr class="bg-default text-white"><th>Date</th><th>Cheque</th><th>Amount</th></tr>`
+                                missed.filter(a=>a.type == 'expense').map((res)=>{
+                                    out += `<tr><th>${res.date.substring(0,10)}</th><th>${res.cheque}</th><th>${res.amount}</th></tr>`
+                                })
+                    out += `<tr><th colspan="2">Total Uncredited Deposits</th><th>${client.sumOfArray(expenses.map(res=>res.amount))}</th></tr></table>`
+
+                    out += `<table class="g-table">
+                                <tr><th>Adjusted Cash Book Balance</th><th>${(bf+recs-pays)- client.sumOfArray(incomes.map(res=>res.amount)) + client.sumOfArray(expenses.map(res=>res.amount))}</th></tr>
+                                <tr><th>Adjusted Cash Book Balance</th><th>${(bf+recs-pays)- client.sumOfArray(incomes.map(res=>res.amount)) + client.sumOfArray(expenses.map(res=>res.amount))}</th></tr>
+                        </table>`  
+
+                        return out
+
+            }
+
+        //     var out = `<table class="g-table"><tr class="bg-default text-white">
+        //                     <th>Sno</th>
+        //                     <th>Cheque number</th>
+        //                     <th>Amount</th>
+        //                     <th>Status</th>
+        //                 </tr>`;
+        //     var count = 1;
+        //     var promises = data.map((res) => {
+        //         return check(res.chequeno, res.amount)
+        //             .then(status => {
+        //                 out += `<tr>
+        //                             <td>${count++}</td>
+        //                             <td>${res.chequeno}</td>
+        //                             <td>${res.amount}</td>
+        //                             <td>${status==200?'<i class="fa fa-check fa-lg text-green-500"></i>':'<i class="fa fa-times fa-lg text-red-500"></i>'}</td>
+        //                         </tr>`;
+        //             });
+        //     });
+
+        //     Promise.all(promises)
+        //         .then(() => {
+        //             out += `</table>`;
+        //             $('#excelData').html(out);
+        //         });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+});
+
+
+</script>

@@ -1,0 +1,150 @@
+<div class="w-full bg-white min-h-[400px] rounded-md mt-10 p-5">
+    <div class="flex justify-between">
+        <div class="flex flex-col">
+            <h1 class="text-[25px] text-slate-800 font-bold">Property</h1>
+            <span class="text-[12px] text-slate-700">All Property Info</span>
+        </div>
+        <button id="new-property-btn"
+        class="flex btn bg-default text-white items-center justify-center border border-gray-300 h-[40px] px-3 ml-2 rounded-md text-[12px]">
+        <i class="fa fa-plus mr-2" aria-hidden="true"></i>
+        New Property
+    </button>
+    </div>
+    <hr>
+    <table id="propTBL" class="g-table">
+        <thead class="bg-default text-white">
+            <tr>
+                <th>Sn</th>
+                <th>Property Name</th>
+                <th>Owner</th>
+                <th>Property Type</th>
+                <th>Plot No</th>
+                <th>Location</th>
+                <th>Town</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody class="tbody">
+        </tbody>
+    </table>
+</div>
+
+<script>
+
+$('#new-property-btn').click(function (e) {
+            e.preventDefault();
+            $(this).attr('submission_type', 'new-addition')
+            $('.property-modal').css('visibility', 'visible')
+            $('.form-title').text("Add New property")
+            $('#property-form').trigger('reset')
+        })
+        $('.close-property-modal').click(function (e) {
+            e.preventDefault();
+            $('.property-modal').css('visibility', 'hidden')
+        })
+        $('#property-form').submit(function (e) {
+            e.preventDefault()
+            let data = { submission_type: $(this).attr('submission_type') }
+            $(this).find('input,select').map((i, row) => {
+                data[$(row).attr('id')] = $(row).val()
+            })
+            $('.loader-cover').removeClass('hidden').addClass('flex')
+            $('.submission-text').removeClass('text-red-700')
+            cls.postData(`${cls.baseUrl}/property.php`, data, (response) => {
+                let res_text = response.msg
+                $('.submission-loader').addClass('hidden')
+                if (response.status == true) {
+                    $('#property-form').trigger('reset')
+                    cls.populate_property_rows()
+                }
+                else {
+                    res_text = response.error
+                    $('.submission-text').addClass('text-red-700')
+                }
+                $('.submission-text').text(res_text)
+                setTimeout(() => {
+                    $('.loader-cover').addClass('hidden')
+                    $('.submission-loader').removeClass('hidden')
+                    $('.submission-text').text("Submitting!")
+                }, 3000);
+            })
+        })
+
+
+        function disProps(arr){
+
+            if ($.fn.DataTable.isDataTable('#propTBL')) {
+            $('#propTBL').DataTable().clear().destroy();
+        }
+            const   
+                    types = arr?.property_type,
+                    coas = arr?.coa,
+                    property = arr?.property,
+                    customers = arr?.customers?.sort();
+                $('#coa_id').empty().html('<option value="">Select COA</option>')
+                $('#type_id').empty().html('<option value="">Select Customer</option>')
+                types?.length > 0 && types.map(pt => $('#type_id').append(`<option value="${pt.id}">${pt.name}</option>`))
+                coas?.length > 0 && coas.map(acc => $('#coa_id').append(`<option value="${acc.id}">${acc.name}</option>`))
+                customers?.length > 0 && customers.map(c => $('#c_id').append(`<option value="${c.id}">${c.firstname} ${c.lastname}</option>`))
+        try {
+            
+        var count = 1
+        const dataTable = $('#propTBL').DataTable({
+        data: response,
+        columns: [
+            { data: null, render: (data, type, row, meta) => count++ },
+            { data: 'name'},
+            { data: null, render: (data, type, row, meta) => `${row.firstname} ${row.lastname}` },
+            { data: null, render: (data, type, row, meta) => `${row.property_type}` },
+            { data: null, render: (data, type, row, meta) => `${row.plot}` },
+            { data: null, render: (data, type, row, meta) => `${row.location}` },
+            { data: null, render: (data, type, row, meta) => `${row.town}` },
+            {
+                data: 'mode', render: (data, type, row, meta) => {
+                    return `<button onclick="viewProp(this.title)" title="${row.id}" class="view-property text-[12px] w-[150px] h-[30px] border rounded-md flex items-center justify-center">
+                                        <i class="fa fa-eye mr-2" aria-hidden="true"></i>
+                                        View Property
+                                    </button>`;
+                }
+            },
+        
+        ],
+        paging: true,
+        pageLength: 10,
+        lengthMenu: [10, 25, 50, 100],
+        searching: true,
+        footerCallback: function (row, data, start, end, display) {
+                let totalAmount = data.reduce((total, item) => total + parseFloat(item['amount']), 0);
+                let formattedTotal = client.format_amount(totalAmount,2);
+                // $(this.api().table().footer()).html(`<tfoot><tr><th colspan="4">Total:</th><th>${formattedTotal}</th><th colspan="2"></th></tr></tfoot>`);
+                $('#fut').html(formattedTotal)
+            }
+       
+        });
+
+        } catch (error) {
+        console.error('An error occurred while initializing DataTable:', error.message);
+        } 
+        function viewProp(id){
+            const row = arr.filter(a=>a.id == id)[0]
+            $('.form-title').text("Property Information")
+                    $('#property-form').attr('submission_type', 'update')
+                    $('.property-modal').css({ visibility: 'visible' })
+                    $('.property-modal form').find('input').map((i, inp) => {
+                        $(inp).val(row[$(inp).attr('id')])
+                    })
+                    $('#type_id').val(row.type_id)
+                    $('#coa_id').val(row.coa_id)
+                    $('#c_id').val(row.owner_id)
+                    $('#submit-property-btn span').text('Update Info')
+        }
+        }
+
+
+        $('#tbody').html(client.loader())
+        $.getJSON(client.baseUrl + '/property.php?property=1', (response)=>{
+            disProps(response)
+        })
+
+
+</script>

@@ -1,0 +1,384 @@
+<div class="w-full bg-white min-h-[400px] rounded-md mt-10 p-5">
+    <div class="flex justify-between">
+        <div class="flex flex-col">
+            <h1 class="text-[25px] text-slate-800 font-bold">Customers</h1>
+            <span class="text-[12px] text-slate-700">All customer Info</span>
+        </div>
+        <button onclick="$('.payModal').css('visibility', 'visible')"
+        class="flex btn bg-default text-white items-center justify-center border border-gray-300 h-[40px] px-3 ml-2 rounded-md text-[12px]">
+        <i class="fa fa-plus mr-2" aria-hidden="true"></i>
+        New Budget
+    </button>
+    </div>
+    <hr>
+    <div id="allCust">
+        <table id="custTble" class="g-table">
+            <thead class="bg-default text-white">
+                <tr>
+                    <th>Sn</th>
+                    <th>Code</th>
+                    <th>Account No</th>
+                    <th>Names</th>
+                    <th>Contact</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+            </tbody>
+        </table>
+    </div>
+    <div id="custState" class="hidden">hai</div>
+</div>
+
+
+<div id="slidingDiv" class="bg-white fixed top-0 right-0 h-full w-1/4 overflow-hidden shadow-lg" style="display: none;">
+    <i onclick="$('#slidingDiv').animate({ width: 'toggle' }, 350)" class="fa fa-times p-1 m-1 fa-lg text-red-500 float-right"></i>
+    <h3 class="m-2 font-semibold text-lg custName"></h3>
+    <hr>
+    <div id="form"></div>
+</div>
+
+<!-- Modal Background -->
+<div style="visibility: hidden;" method="post"
+    class="customer-modal new-customer-modal fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+    <!-- Modal Content -->
+    <form id="customer-form" submission_type="new-addition"
+        class="bg-white min-h-[60vh] rounded p-5 w-[60%] mx-20 shadow-lg overflow-y-auto relative">
+        <!-- submission-wrapper -->
+        <div
+            class="loader-cover hidden absolute w-full h-full bg-black/30 top-0 left-0 flex items-center justify-center">
+            <div
+                class="w-[400px] h-[300px] bg-white rounded-md shadow-defaults flex items-center justify-center flex-col">
+                <div class="submission-loader text-center">
+
+                    <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                        role="status">
+                    </div>
+                </div>
+                <h4 class="text-black font-semibold text-[18px] mt-3 submission-text">Submitting</h4>
+            </div>
+        </div>
+        <!-- submission-wrapper -->
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center mb-4 border-b pb-5">
+            <h2 class="text-xl font-semibold form-title">Add New Customer</h2>
+            <button class="close-customer-modal text-gray-500 hover:text-gray-700">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <!-- Modal Body -->
+        <div class="p-4 w-full grid grid-cols-2 gap-4">
+            <input id="id" type="hidden" placeholder="Code" class="border rounded p-2 w-full text-[12px]">
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">Code *</label>
+                <input id="code" type="text" placeholder="Code" class="border rounded p-2 w-full text-[12px]" required>
+            </div>
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">Account No *</label>
+                <input id="account_no" type="text" placeholder="Account No"
+                    class="border rounded p-2 w-full text-[12px]" required>
+            </div>
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">First Name *</label>
+                <input id="firstname" type="text" placeholder="First Name" class="border rounded p-2 w-full text-[12px]"
+                    required>
+            </div>
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">Middle Name</label>
+                <input id="middlename" type="text" placeholder="Middle Name"
+                    class="border rounded p-2 w-full text-[12px]">
+            </div>
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">Last Name</label>
+                <input id="lastname" type="text" placeholder="Last Name" class="border rounded p-2 w-full text-[12px]">
+            </div>
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">Contact Number *</label>
+                <input id="phonenumber" type="text" placeholder="Contact No"
+                    class="border rounded p-2 w-full text-[12px]" required>
+            </div>
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">Sex</label>
+                <!-- <input id="sex" type="text" placeholder="Sex" class="border rounded p-2 w-full text-[12px]"> -->
+                <select id="sex" class="border rounded p-2 w-full text-[12px]">
+                    <option value="">Select Sex</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">NRC</label>
+                <input id="nrc" type="text" placeholder="NRC" class="border rounded p-2 w-full text-[12px]">
+            </div>
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">D.O.B</label>
+                <input id="dob" type="date" placeholder="D.O.B" class="border rounded p-2 w-full text-[12px]">
+            </div>
+            </di>
+            <!-- Modal Footer (optional) -->
+            <div class="mt-4 flex justify-end mt-10 pt-5 border-t col-span-2">
+                <button
+                    class="close-customer-modal bg-gray-100 hover:bg-gray-200 w-[150px] text-[13px] text-gray-700 font-semibold py-2 px-4 rounded">
+                    Close
+                </button>
+                <button id="submit-customer-btn" type="submit"
+                    class="bg-default hover:bg-default/90   w-[150px] text-[13px] text-white font-bold py-2 px-4 rounded mx-2"><i
+                        class="fa fa-paper-plane mr-2"></i>
+                    <span>Submit</span>
+                </button>
+            </div>
+    </form>
+
+    
+</div>
+
+
+<script>
+    var cid = 0
+    var nameTOsend = '';
+    function creditNote(id, name){
+        $('.custName').html(name)
+        cid = id
+        nameTOsend = name
+        var cnote = `<div class="max-w-md mx-auto bg-white p-8 rounded">
+                <select id="budget" class="border rounded p-2 w-full mb-4"></select>
+                <select id="exType" class="border rounded p-2 w-full mb-4"></select>
+                <select id="cashBook" class="cashbook border rounded p-2 w-full mb-4" disabled></select>
+                <select id="cashSof" class="border rounded p-2 w-full mb-4"></select>
+                <input id="chequeno" type="text" placeholder="cheque number" class="border rounded p-2 w-full mb-4">
+                <input id="Examount" type="text" placeholder="amount" class="border rounded p-2 w-full mb-4">
+                <textarea id="Exdesc" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"></textarea>
+                <div class="text-center">
+                <button onclick="subPay()" class="subInv mt-6 bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800">Submit</button>
+                </div>
+            </div>`
+        $('#form').html(cnote)
+        $('#slidingDiv').animate({ width: 'toggle' }, 350);
+    
+        $('.cashbook').html(client.makeSels(client.banks, 'cashbook', 'id', 'name'))
+                $('#cashSof').html(client.makeSels(client.sof, 'source of fund', 'id', 'name'))
+            var muB = []
+                client.budget.map((res)=>{
+                    if(client.useWanted(client.coa, res.coa)?.account.substring(0,1)== '1'){
+                        muB.push(res) 
+                    }
+                })
+                $('#budget').select2({
+            placeholder: 'Search for a budget',
+            allowClear: true, 
+            data: muB.map(res => ({
+                id: res.id,
+                text: `${res.subprogram}: ${client.useWanted(client.dept, res.dept)?.name}: ${client.useWanted(client.coa, res.coa)?.account}: ${res.toy}`
+            }))
+        });
+              
+        $('#budget').change(function(){
+                $.getJSON(client.baseUrl + '/cash.php?proj=' + $(this).val(), (response) => {
+                    $('#exType').html(client.makeSels(response, 'project', 'id', 'name'))
+                })
+            })
+        
+    }
+    
+    function subPay(){
+        $('.subPay').prop('disabled', true)
+    
+            fd = {
+                    exType:$('#exType').val(),
+                    Exbudget:$('#budget').val(),
+                    Examount:$('#Examount').val(),
+                    Exdesc:$('#Exdesc').val(),
+                    Expaye:nameTOsend,
+                    cashBook:$('#cashBook').val(),
+                    cashBook:$('#cashBook').val(),
+                    chequeno:$('#chequeno').val(),
+                    cashSof:$('#cashSof').val(),
+                    cidNames:cid
+                }
+        client.postData(`${client.baseUrl}/customer.php`, fd, (response)=>{
+                if(response.status == 200){
+                    client.ourAlert('Successful', 1)
+                    $('#slidingDiv').animate({ width: 'toggle' }, 350) 
+                }else{
+                    client.ourAlert('Something went wrong', 2)
+                }
+                    $('.subInv').prop('disabled', false)
+            })
+    
+    }
+    
+    
+    function backSup(){
+        
+        $('#custState').hide()
+        $('#allCust').show()
+    }
+    function custState(id, name){
+    
+        $('#allCust').hide()
+        $('#custState').show()
+    
+        $('#custState').html(client.loader())
+    
+        $.getJSON(`${client.baseUrl}/customer.php?custState=${id}`, (response)=>{
+            var bills = response.bills
+            var rec = response.receipts
+            var data = client.mergeArr(bills, rec).sort((a, b) => new Date(a.date) - new Date(b.date))
+    
+            console.log(data)
+    
+            var balance = 0.0
+                var out = `<i onclick="backSup()" class="fa fa-arrow-circle-left fa-2x mb-3"></i><br><div class="mb-4">
+                            <p class="text-lg font-semibold text-gray-600">Customer Name: ${name}</p>
+                            </div>
+                          <table class="min-w-full border border-gray-300">
+                        <thead>
+                        <tr class="text-left bg-default text-white">
+                            <th class="border-b px-4 py-2">Date</th>
+                            <th class="border-b px-4 py-2">Invoice #</th>
+                            <th class="border-b px-4 py-2">Description</th>
+                            <th class="border-b px-4 py-2">Debit</th>
+                            <th class="border-b px-4 py-2">Credit</th>
+                            <th class="border-b px-4 py-2">Balance</th>
+                        </tr>
+                    </thead><tbody>
+                        `
+    
+                        if(data.length == 0){
+                                out += `<tr> <td colspan="6" class="border-b px-4 py-2 text-center">No data</td> </tr>`
+                            }else{
+                                data.map((res)=>{
+                                res.invoice_no != null == 1?balance += parseFloat(res.amount):0
+                                res.invoice_no == null?balance -= parseFloat(res.amount):0
+                                out += `<tr>
+                                <td class="border-b px-4 py-2">${res.date.substring(0,10)}</td>
+                                <td class="border-b px-4 py-2">${res[1]}</td>
+                                <td class="border-b px-4 py-2">${res.description}</td>
+                                <td class="border-b px-4 py-2">${res.invoice_no != null?client.format_amount(res.amount):0}</td>
+                                <td class="border-b px-4 py-2">${res.invoice_no == null?client.format_amount(res.amount):0}</td>
+                                <td class="border-b px-4 py-2">${client.format_amount(balance)}</td>
+                                </tr>`
+                   })
+                            }
+                        out += `</tbody></table>`
+                        $('#custState').html(out)
+    
+        })
+    
+    
+    }
+
+    $('#new-customer-btn').click(function (e) {
+            e.preventDefault();
+            $(this).attr('submission_type', 'new-addition')
+            $('.customer-modal').css('visibility', 'visible')
+            $('.form-title').text("Add New Customer")
+            $('#customer-form').trigger('reset')
+        })
+        $('.close-customer-modal').click(function (e) {
+            e.preventDefault();
+            $('.customer-modal').css('visibility', 'hidden')
+        })
+        $('#customer-form').submit(function (e) {
+            e.preventDefault()
+            let data = { submission_type: $(this).attr('submission_type') }
+            $(this).find('input, select').map((i, row) => {
+                data[$(row).attr('id')] = $(row).val()
+            })
+            $('.loader-cover').removeClass('hidden').addClass('flex')
+            $('.submission-text').removeClass('text-red-700')
+            cls.postData(`${cls.baseUrl}/customer.php`, data, (response) => {
+                let res_text = response.msg
+                $('.submission-loader').addClass('hidden')
+                if (response.status == true) {
+                    $('#customer-form').trigger('reset')
+                    cls.populate_customer_rows()
+                }
+                else {
+                    res_text = response.error
+                    $('.submission-text').addClass('text-red-700')
+                }
+                $('.submission-text').text(res_text)
+                setTimeout(() => {
+                    $('.loader-cover').addClass('hidden')
+                    $('.submission-loader').removeClass('hidden')
+                    $('.submission-text').text("Submitting!")
+                }, 3000);
+            })
+        })
+
+        function disCustomers(arr){
+            if ($.fn.DataTable.isDataTable('#custTble')) {
+            $('#custTble').DataTable().clear().destroy();
+            }
+
+            console.log(arr)
+                try {
+
+            var count = 1
+            const dataTable = $('#custTble').DataTable({
+            data: arr,
+            columns: [
+            { data: null, render: (data, type, row, meta) => count++ },
+            { data: 'code'},
+            { data: 'account_no'},
+            { data: null, render: (data, type, row, meta) => `${row.firstname} ${row.middlename} ${row.lastname}` },
+            { data: 'phonenumber'},
+            {
+                data: 'mode', render: (data, type, row, meta) => {
+                    return ` <button class="view-customer m-2">
+                                        <i class="fa fa-pen mr-2 fa-lg text-default" aria-hidden="true"></i>
+                                    </button>
+                                    <button onclick="creditNote(this.title, this.id)" title="${row.id}" id="${row.firstname} ${row.middlename} ${row.lastname}" class="m-2">
+                                        <i class="fa fa-credit-card mr-2 fa-lg text-default" aria-hidden="true"></i>
+                                    </button>
+                                    <button onclick="custState(this.title, this.id)" title="${row.id}" id="${row.firstname} ${row.middlename} ${row.lastname}" class="m-2">
+                                        <i class="fa fa-arrow-right mr-2 fa-lg text-default" aria-hidden="true"></i>
+                                    </button>`;
+                }
+            },
+
+            ],
+            paging: true,
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100],
+            searching: true,
+            footerCallback: function (row, data, start, end, display) {
+                let totalAmount = data.reduce((total, item) => total + parseFloat(item['amount']), 0);
+                let formattedTotal = client.format_amount(totalAmount,2);
+                // $(this.api().table().footer()).html(`<tfoot><tr><th colspan="4">Total:</th><th>${formattedTotal}</th><th colspan="2"></th></tr></tfoot>`);
+                $('#fut').html(formattedTotal)
+            }
+
+            });
+
+            $('.view-customer').click(function () {
+                    var nid = $(this).attr('title')
+                    const row = arr.filter(a=>a.id == id)[0]
+                    $('.form-title').text("Customer Information")
+                    $('#customer-form').attr('submission_type', 'update')
+                    $('.customer-modal').css({ visibility: 'visible' })
+                    $('.customer-modal form').find('input').map((i, inp) => {
+                        $(inp).val(row[$(inp).attr('id')])
+                    })
+                    $('#submit-customer-btn span').text('Update Info')
+                })
+
+            } catch (error) {
+            console.error('An error occurred while initializing DataTable:', error.message);
+            } 
+
+
+
+        }
+
+        $.getJSON(client.baseUrl + '/customer.php?allcustomers=1', (response)=>{
+            disCustomers(response)
+        })
+
+        
+    
+    </script>
+

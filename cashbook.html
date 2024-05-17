@@ -1,0 +1,376 @@
+<div class="w-full bg-white min-h-[400px] rounded-md mt-10 p-5">
+    <div class="flex justify-between">
+        <div class="flex flex-col">
+            <h1 class="text-[25px] text-slate-800 font-bold">Cashbook</h1>
+            <span class="text-[12px] text-slate-700">All cash transactions</span>
+        </div>
+        <button onclick="$('.payModal').css('visibility', 'visible')"
+        class="flex btn bg-default text-white items-center justify-center border border-gray-300 h-[40px] px-3 ml-2 rounded-md text-[12px]">
+        <i class="fa fa-plus mr-2" aria-hidden="true"></i>
+        New 
+    </button>
+    </div>
+
+    <div class="flex justify-center items-center">
+        <select class="border rounded p-2 w-50 m-4 cashbook" id="cashbooks"></select>
+        <i onclick="$('#slidingDiv').animate({ width: 'toggle' }, 350)" class="fa fa-arrow-circle-right fa-2x text-default"></i>
+    </div>
+    <hr>
+    <table id="budgetTbl" class="g-table">
+        <thead class="bg-default text-white">
+            <tr>
+                <th>Sn</th>
+                <th>Voucher</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Debit</th>
+                <th>Credit</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody class="tbody">
+        </tbody>
+    </table>
+</div>
+
+
+  <!-- Modal Background -->
+  <div style="visibility: hidden;" class="payModal fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+    <!-- Modal Content -->
+    <div style="max-height: 35rem;" class="bg-white rounded p-8 w-full mx-20 shadow-lg overflow-y-auto">
+      <!-- Modal Header -->
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold">Make Payment</h2>
+        <button onclick="$('.payModal').css('visibility', 'hidden')" class="text-gray-500 hover:text-gray-700">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <!-- Modal Body -->
+      <div class="p-4">
+        <hr class="my-4">
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <select id="budget" class="border rounded p-2 w-full mb-4">
+                </select>
+                <select id="exType" class="border rounded p-2 w-full mb-4">
+                </select>
+            </div>
+            <div>
+                <input id="cashType" type="hidden">
+                <select id="cashBook" class="cashbook border rounded p-2 w-full mb-4"></select>
+                <select id="cashSof" class="border rounded p-2 w-full mb-4"></select>
+            </div>
+            <div>
+                <input id="chequeno" type="text" placeholder="cheque number" class="border rounded p-2 w-full mb-4">
+                <select id="Expaye" class="border rounded p-2 w-full mb-4"></select>
+            </div>
+            <div>
+                <input id="Examount" type="text" placeholder="amount" class="border rounded p-2 w-full mb-4">
+                <input type="date" id="exDate" class="border rounded p-2 w-full mb-4">
+            </div>
+            <div>
+                <textarea id="Exdesc" cols="30" rows="" placeholder="description" class="border rounded p-2 w-full mb-4"></textarea>
+            </div>
+        </div>
+        
+        <hr class="my-4">
+        <button onclick="addTo()" class="bg-default text-white rounded mx-2 px-4"> <i class="fa fa-plus"></i> Add</button>
+
+        <div id="addedItems"></div>
+
+        <hr class="my-4">
+      </div>
+      <!-- Modal Footer (optional) -->
+      <div class="mt-4 flex justify-end">
+        <button onclick="$('.payModal').css('visibility', 'hidden')"  class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold py-2 px-4 rounded">
+          Close
+        </button>
+        <button id="submitPayBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mx-2"><i class="fa fa-paper-plane"></i> Submit</button>
+      </div>
+    </div>
+</div>
+</div>
+
+<div id="slidingDiv" class="bg-white fixed top-0 right-0 h-full w-1/4 overflow-hidden shadow-lg" style="display: none;">
+<i onclick="$('#slidingDiv').animate({ width: 'toggle' }, 350)" class="fa fa-times p-1 m-1 fa-lg text-red-500 float-right"></i>
+<h3 class="m-2 font-semibold text-lg supName">Cash Transfer</h3>
+<hr>
+<div class="max-w-md mx-auto bg-white p-8 rounded">
+<label for="cashbook" class="block text-sm font-medium text-gray-600 mb-2">From:</label>
+<select class=" cashbook w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500" id="fromCash"></select>
+<label for="cashbook" class="block mt-4 text-sm font-medium text-gray-600 mb-2">To:</label>
+<select class=" cashbook w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500" id="toCash"></select>
+<label for="description" class="block mt-4 text-sm font-medium text-gray-600 mb-2">Amount:</label>
+<input id="toAmount" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500">
+<label for="description" class="block mt-4 text-sm font-medium text-gray-600 mb-2">Description:</label>
+<textarea id="cashdesc" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"></textarea>
+<div class="text-center">
+<button onclick="subCashT()" class="subInv mt-6 bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800">Submit</button>
+</div>
+</div>
+</div>
+
+
+<script>
+    $('.cashbook').html(client.makeSels(client.banks, 'cashbook', 'id', 'name'))
+
+    $('#sof').html(client.makeSels(client.sof, 'source of funds', 0, 2))
+  $('#banks').html(client.makeSels(client.banks, 'cash book', 0, 4))
+  $('#colce').html(client.makeSels(client.cc, 'collection center', 0, 1))
+
+    var allCash = []
+    $('#cashbooks').change(function(){
+        displayCash(allCash, $(this).val())
+    })
+    // function displayCash(response, bank){
+    //         var cash = response.filter(a=>a.bank == bank)
+    //         var out = ``
+    //         var debs = 0.0
+    //         var creds = 0.0
+    //         var count = 1
+    //         cash.map((res)=>{
+    //             debs += res.coa_id == undefined || res.type == 'income'?parseFloat(res.amount):0
+    //             creds += res.type!=undefined && res.type == 'expense'?parseFloat(res.amount):0
+    //             out += ` <div class="w-full tr grid grid-cols-16 h-[60px] border-b text-slate-700 gap-x-4">
+    //                 <span class="row_object hidden" row="${JSON.stringify(res)}"></span>
+    //                 <div class="th flex items-center justify-center h-full w-full col-span-1">
+    //                     <input type="checkbox" name="" id="" class="accent-default">
+    //                 </div>
+    //                 <div class="th flex items-center h-full w-full col-span-1">
+    //                     <div class="flex items-center justify-center bg-default rounded-full text-white w-10 h-10 font-bold">${client.banks.filter(a=>a.id == res.bank)[0].name.substring(0,2).toUpperCase()}${count++}</div>
+    //                 </div>
+    //                 <div class="th flex items-center h-full w-full col-span-2">${res.cheque}</div>
+    //                 <div class="th flex items-center h-full w-full col-span-2">${res.date.substring(0,10)}</div>
+    //                 <div class="th flex items-center h-full w-full col-span-2">${res.description}</div>
+    //                 <div class="th flex items-center h-full w-full col-span-2">${client.format_amount(res.coa_id == undefined || res.type == 'income'?parseFloat(res.amount):0)}</div>
+    //                 <div class="th flex items-center h-full w-full col-span-2">${client.format_amount(res.type!=undefined && res.type == 'expense'?parseFloat(res.amount):0)}</div>
+    //                 <div class="th flex items-center h-full w-full col-span-2">
+    //                     <button
+    //                     title="${res.id}" id="${res.chq}"
+    //                         class="wanaShowBill flex items-center justify-center border border-gray-300 w-full h-[30px] rounded-md text-[12px]">
+    //                         <i class="fa fa-eye mr-2" aria-hidden="true"></i>
+    //                         View
+    //                     </button>
+    //                 </div>
+    //             </div>`
+    //         })
+    //         $('.bills_rows').html(out)
+    //         $('.total_bill_rows').text(count)
+    //         $('.total_bill_outstanding').text(client.format_amount(debs))
+    //         $('.total_bill_paying').text(client.format_amount(creds))
+    //         $('.total_bill_cash').text(client.format_amount(debs-creds))
+
+    //         $('.wanaShowBill').click(function () {
+    //         var newTab = window.open(`/print_formats/payment.html?pay_id=${$(this).attr('title')}`, '_blank');
+    //         newTab.focus();
+    //     })
+    // }
+
+    function displayCash(response, bank){
+        if ($.fn.DataTable.isDataTable('#budgetTbl')) {
+                $('#budgetTbl').DataTable().clear().destroy();
+            }
+            
+            try {
+                
+        var count = 1
+        const dataTable = $('#budgetTbl').DataTable({
+            data: response.filter(a=>a.bank == bank),
+            columns: [
+                { data: null, render: (data, type, row, meta) => `${client.banks.filter(a=>a.id == row.bank)[0].name.substring(0,2).toUpperCase()}${row.id}`},
+                { data: null, render: (data, type, row, meta) => `${row.cheque}` },
+                { data: null, render: (data, type, row, meta) => `${row.date.substring(0,10)}` },
+                { data: null, render: (data, type, row, meta) => `${row.description}` },
+                { data: null, render: (data, type, row, meta) => `${client.format_amount(row.coa_id == undefined || row.type == 'income'?parseFloat(row.amount):0)}` },
+                { data: null, render: (data, type, row, meta) => `${client.format_amount(row.type!=undefined && row.type == 'expense'?parseFloat(row.amount):0)}` },
+                {
+                    data: 'mode', render: (data, type, row, meta) => {
+                        return `<i onclick="print(this.title)" title="${row.id}" id="${row.chq}" onclick="viewBudget(this.title)" title="${row.id}" class="fa fa-print fa-lg text-default mr-2"></i>`;
+                    }
+                },
+              
+            ],
+            paging: true,
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100],
+            searching: true,
+            footerCallback: function (row, data, start, end, display) {
+                let totalAmount = data.reduce((total, item) => total + parseFloat(item['amount']), 0);
+                let formattedTotal = client.format_amount(totalAmount);
+                $(this.api().table().footer()).html(`<tfoot><tr><th colspan="4">Total:</th><th>${formattedTotal}</th><th colspan="2"></th></tr></tfoot>`);
+            }
+        });
+
+        } catch (error) {
+            console.error('An error occurred while initializing DataTable:', error.message);
+        } 
+    }
+
+    function print(id){
+        var newTab = window.open(`/print_formats/payment.html?pay_id=${id}`, '_blank');
+            newTab.focus();
+    }
+
+
+    $('.bills_rows').html(client.loader())
+    function getCash(){
+        $.getJSON(client.baseUrl+'/cash.php?cash',(response)=>{
+            displayCash(response.cash, 1)
+            allCash = [...response.cash]
+        })
+    }
+getCash()
+
+$('#budget').select2({
+placeholder: 'Search for a budget',
+allowClear: true, 
+data: client.budget.map(res => ({
+    id: res.id,
+    text: `${res.subprogram}: ${client.useWanted(client.dept, res.dept)?.name}: ${client.useWanted(client.coa, res.coa)?.account}: ${client.useWanted(client.coa, res.coa)?.name}: ${res.toy}`
+}))
+});
+
+function subCashT(){
+$('.subInv').prop('disabled', true)
+        if($('#fromCash').val().length == 0 || $('#toCash').val().length == 0 || $('#toAmount').val().length == 0){
+            client.ourAlert('Please select both options', 2)
+            $('.subInv').prop('disabled', false)
+            return
+        }
+        var data = {
+            fromCash:$('#fromCash').val(),
+            toCash:$('#toCash').val(),
+            toAmount:$('#toAmount').val(),
+            cashdesc:$('#cashdesc').val(),
+        }
+        client.postData(`${client.baseUrl}/cash.php`, data, (response)=>{
+            if(response.status == 200){
+                client.ourAlert('Successful', 1)
+                $('#slidingDiv').animate({ width: 'toggle' }, 350)
+                getCash()
+            }else{
+                client.ourAlert('Something went wrong', 2)
+            }
+            $('.subInv').prop('disabled', false)
+        })
+    }
+// $('#cashBook').html(client.makeSels(client.banks, 'cashbook', 'id', 'name'))
+$('#cashSof').html(client.makeSels(client.sof, 'source of fund', 'id', 'name'))
+$('#budget').change(function(){
+    var coa = client.budget.filter(a=>a.id == $(this).val())[0].coa
+    var acc = client.useWanted(client.coa, coa)?.account
+    console.log(client.cust)
+    if(parseInt(acc[0]) == 1){
+        var cust = '<option value="">Select customer</option>'
+        client.cust.map((res) => {
+        cust += `<option value="${res.id}">${res.firstname} ${res.lastname}</option>`
+            })
+        $('#Expaye').html(cust)
+        $('#cashType').val('income')
+    }else{
+        $('#Expaye').html(client.makeSels(client.suppliers, 'supplier', 'id', 'name'))
+        $('#cashType').val('expense')
+    }
+    $.getJSON(client.baseUrl + '/cash.php?proj=' + $(this).val(), (response) => {
+        $('#exType').html(client.makeSels(response, 'project', 'id', 'name'))
+    })
+})
+var budgets = []
+var projects = []
+var amounts = []
+    function addTo(){
+        budgets.push($('#budget').val())
+        projects.push($('#exType').val())
+        amounts.push($('#Examount').val())
+
+        $('#addedItems').html(displayItems())
+    }
+    function displayItems(){   
+        var out = `
+            <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sno.</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Activity</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th scope="col" class="relative px-6 py-3"></th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+        `;
+        var count = 0;
+        var total = 0.0;
+        budgets.map((res) => {
+            var num = count+1;
+            out += `
+            <tr>
+                <td class="px-6 py-4 whitespace-nowrap">${num}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${client.budget.filter(a=>a.id == res)[0].subprogram} : ${client.budget.filter(a=>a.id == res)[0].toy}</td>
+                <td class="px-6 py-4 whitespace-nowrap">${amounts[count]}</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                <i onclick="deletearr(this.title)" title="${count}" class="fa fa-trash fa-lg text-default text-danger cursor-pointer"></i>
+                </td>
+            </tr>
+            `;
+            total += parseFloat(amounts[count]);
+            count++;
+        });
+        out += `
+            <tr>
+                <td colspan="2" class="px-6 py-3 text-right text-sm font-medium text-gray-900">Total</td>
+                <td class="px-6 py-3 text-left text-sm text-gray-900">${total}</td>
+                <td class="px-6 py-3"></td>
+            </tr>
+            </tbody>
+            </table>
+        `;
+        return out;
+    }
+
+$('#submitPayBtn').click(function(e){
+    e.preventDefault()
+    $(this).prop('disabled', true)
+    if(budgets.length == 0 || amounts.length == 0 || $('#cashType').val().length == 0 || $('#Expaye').val().length == 0 
+    || $('#cashBook').val().length == 0
+    || $('#cashSof').val().length == 0
+    || $('#chequeno').val().length == 0
+    ){
+        client.ourAlert('Ensure to enter required fields',2)
+        $(this).prop('disabled', false)
+        return
+    }
+    var data = {
+        exType:projects,
+        Exbudget:budgets,
+        Examount:amounts,
+        Exdesc:$('#Exdesc').val(),
+        cashType:$('#cashType').val(),
+        Expaye:$('#Expaye').val(),
+        cashBook:$('#cashBook').val(),
+        chequeno:$('#chequeno').val(),
+        cashSof:$('#cashSof').val(),
+        exDate:$('#exDate').val(),
+        updatedBy:client.uid
+    }
+    client.postData(client.baseUrl+'/cash.php', data, (response)=>{
+        if(response.status == 200){
+            client.ourAlert(response.msg, 1)
+            $('#exType').val('')
+            $('#Examount').val('')
+            $('#Exdesc').val('')
+            $('#cashType').val('')
+            $('#Expaye').val('')
+            $('#chequeno').val('')
+            $('.payModal').css('visibility', 'hidden')
+            getCash()
+        }else{
+            client.ourAlert(response.msg, 2)
+        }
+        $(this).prop('disabled', false)
+    })  
+})
+  </script>
+
+    

@@ -1,0 +1,211 @@
+<div class="w-full ">
+    <div class="bg-white shadow rounded p-4">
+
+        <h4 class="text-[20px] text-slate-800 font-bold">Transactions</h4>
+        <hr class="my-3">
+
+        <div class="container mx-auto p-4 mt-3">
+            <table class="table" id="cashtans">
+                <thead>
+                <tr>
+                  <th>Sno</th>
+                  <th>Voucher</th>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Debit</th>
+                  <th>Credit</th>
+                  <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="trans">
+
+            </tbody>
+            </table>
+          </div>
+
+
+
+    </div>
+</div>
+
+
+
+
+<!-- Modal Background -->
+<div style="visibility: hidden;"
+    class="showPay fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+    <!-- Modal Content -->
+    <div style="max-height: 25rem;" class="bg-white rounded p-8 w-full mx-20 shadow-lg overflow-y-auto">
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold">View More</h2>
+            <button onclick="$('.showPay').css('visibility', 'hidden')" class="text-gray-500 hover:text-gray-700">
+                <i class="fa fa-times fa-lg"></i>
+            </button>
+        </div>
+        <hr>
+        <!-- Modal Body -->
+        <div class="p-4">
+
+            <div id="details"></div>
+            <hr class="my-5">
+            <textarea placeholder="Add comment here" class="border p-3 m-3 text-[13px] mt-3 w-full resize-none rounded" id="commForAct" rows="3"></textarea>
+            <select name="" id="approved" class="border p-3 m-3 text-[13px] mt-3 w-full rounded">
+                <option value="0">Proceed</option>
+                <option value="3">Approve</option>
+                <option value="9">Declined</option>
+            </select>
+        
+
+        </div>
+        <!-- Modal Footer (optional) -->
+        <div class="mt-4 flex justify-end">
+            <button onclick="$('.showPay').css('visibility', 'hidden')"
+                class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold py-2 px-4 rounded">
+                Close
+            </button>
+            <button id="submitPay"
+                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mx-2"><i
+                    class="fa fa-paper-plane"></i> Submit</button>
+        </div>
+    </div>
+</div>
+
+<script>
+
+let previousBankId = null;
+let bankCounts = {};
+
+var allData = []
+var cashId = 0
+
+function getBankCode(bankId) {
+    if (bankId !== previousBankId) {
+        bankCounts[bankId] = 1;
+    } else {
+        bankCounts[bankId] = (bankCounts[bankId] || 0) + 1;
+    }
+    previousBankId = bankId;
+    const bankName = client.banks.find(bank => bank.id === bankId)?.name;
+    if (bankName) {
+        const abbreviation = bankName.substring(0, 2).toUpperCase();
+        return abbreviation + bankCounts[bankId];
+    } else {
+        return '';
+    }
+}
+
+$('#submitPay').click(function(e){
+
+    e.preventDefault()
+
+    var data = {
+        approved:$('#approved').val(),
+        commForAct:$('#commForAct').val(),
+        userFor:client.uid,
+        cashId:cashId
+    }
+    
+
+    client.postData(`${client.baseUrl}/cash.php`,data, (response)=>{
+        if(response.status == 200){
+            client.ourAlert('Successful', 1)
+            $('.showPay').css('visibility', 'hidden')
+        }else{
+            client.ourAlert('Failed', 2)
+        }
+    })
+
+})
+
+function view(id){
+    cashId = id
+    $('.showPay').css('visibility', 'visible')
+
+    $.getJSON(`${client.baseUrl}/cash.php?details=${id}`, (response)=>{
+
+        var other = response.other
+        var actions = response.actions
+
+        var cash = allData.filter(a=>a.id == id)
+
+        var prep = client.users.filter(a=>a.u_id == cash[0].updatedBy)[0]
+
+        var arr = ['Checked By', 'Authorized By', 'Approved By']
+
+        var out = `<table class="min-w-full divide-y divide-gray-200">
+    <thead>
+        <tr class="bg-default text-white">
+            <th class="border p-2">Account</th>
+            <th class="border p-2">COA</th>
+            <th class="border p-2">Program</th>
+            <th class="border p-2">Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="border p-2">${other[0].account}</td>
+            <td class="border p-2">${other[0].chart}</td>
+            <td class="border p-2">${other[0].prog}</td>
+            <td class="border p-2">${cash[0].amount}</td>
+        </tr>
+    </tbody>
+</table>
+`
+            
+                
+        
+        out += `<br><br><span class="my-5">Prepared by: ${prep.firstname + prep.lastname} - ${prep.name}</span><br>`
+        var count = 0;
+        actions.map((res)=>{
+            var us = client.users.filter(a=>a.u_id == res.uid)[0]
+            out += `<br>${arr[count]}: ${us.firstname + us.lastname} - ${us.name} <br> ${res.text}<br>${res.date.substring(0,10)}<br><br>`
+            count++
+        })
+        $('#details').html(out)
+
+    })
+
+
+}
+
+
+    $.getJSON(`${client.baseUrl}/cash.php?trans=${client.uid}`, (response)=>{
+
+        console.log(response.cash)
+
+        allData = [...response.cash]
+
+        $('#cashtans').DataTable().clear().destroy();
+
+        try {
+        var count = 1
+        const dataTable = $('#cashtans').DataTable({
+        data: response.cash,
+        columns: [
+        { data: null, render: (data, type, row, meta) => getBankCode(row.bank)},
+        { data: 'cheque' },
+        { data: null, render: (data, type, row, meta) =>  row.date.substring(0,10)},
+        { data: 'description' },
+        { data: null, render: (data, type, row, meta) =>  client.format_amount(row.coa_id == undefined || row.type == 'income'?parseFloat(row.amount):0)},
+        { data: null, render: (data, type, row, meta) =>  client.format_amount(row.type!=undefined && row.type == 'expense'?parseFloat(row.amount):0)},
+        
+        {
+            data: 'id', render: (data, type, row, meta) => {
+                return `<i onclick="view(${data})" title="${data}" class="fa fa-eye fa-2x text-blue-500"></i>`;
+            }
+        },
+        ],
+        paging: true,
+        pageLength: 10,
+        lengthMenu: [10, 25, 50, 100],
+        searching: true,
+        });
+
+        } catch (error) {
+        console.error('An error occurred while initializing DataTable:', error.message);
+        } 
+
+    })
+
+</script>

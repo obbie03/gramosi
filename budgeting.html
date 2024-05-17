@@ -1,0 +1,254 @@
+<div class="w-full bg-white min-h-[400px] rounded-md mt-10 p-5">
+    <div class="flex justify-between">
+        <div class="flex flex-col">
+            <h1 class="text-[25px] text-slate-800 font-bold">Budgeting</h1>
+            <span class="text-[12px] text-slate-700">All budgeting Info</span>
+        </div>
+        <button onclick="$('.payModal').css('visibility', 'visible')"
+        class="flex btn bg-default text-white items-center justify-center border border-gray-300 h-[40px] px-3 ml-2 rounded-md text-[12px]">
+        <i class="fa fa-plus mr-2" aria-hidden="true"></i>
+        New Budget
+    </button>
+    </div>
+    <hr>
+    <table id="budgetTbl" class="g-table">
+        <thead class="bg-default text-white">
+            <tr>
+                <th>Sn</th>
+                <th>Department</th>
+                <th>COA</th>
+                <th>Program</th>
+                <th>Amount</th>
+                <th>TOI</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody class="tbody">
+        </tbody>
+    </table>
+</div>
+    
+<!-- Modal Background -->
+<div style="visibility: hidden;"
+class="budgetModal new-customer-modal fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+<!-- Modal Content -->
+<div class="bg-white min-h-[80vh] rounded p-5 w-[80%] mx-20 shadow-lg overflow-y-auto">
+    <!-- Modal Header -->
+    <div class="flex justify-between items-center mb-4 border-b pb-5">
+        <h2 class="text-xl font-semibold form-title">View Budget Item</h2>
+        <button onclick="$('.budgetModal').css('visibility', 'hidden')"
+            class="new-customer-btn text-gray-500 hover:text-gray-700">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+    <!-- Modal Body -->
+    <div id="new-customer" class="max-h-80 overflow-y-auto">
+        <div id="budDetails" class="mb-2">
+        </div>
+        <br>
+        <hr>
+        <br>
+        <button class="bg-default hover:bg-default/90   w-[150px] text-[13px] text-white font-bold py-2 px-4 rounded mx-2" onclick="$('.projDiv').slideToggle()"> <i class="fa fa-plus"></i> Project </button>
+        <div class="mt-2 hidden projDiv">
+            <select id="projhead" class="border rounded p-2 w-1/2 text-[12px]"></select>
+        <br>
+        <br>
+            <select id="projsub" class="border rounded p-2 w-1/2 text-[12px]"></select>
+        <br>
+        <br>
+            <div class="w-full">
+                <input id="projname" type="text" placeholder="name" class="border rounded p-2 w-1/2 text-[12px]">
+            </div>
+            <br>
+            <div class="w-full">
+                <textarea name="" id="projdesc" placeholder="description" class="border rounded p-2 w-1/2 text-[12px]" cols="30" rows="3"></textarea>
+            </div>
+            <div class="w-full">
+                <input id="projamount" type="text" placeholder="amount" class="border rounded p-2 w-1/2 text-[12px]">
+            </div>
+            <br>
+            <button id="submitBudBtn"
+            class="bg-default hover:bg-default/90   w-[150px] text-[13px] text-white font-bold py-2 px-4 rounded mx-2"><i
+                class="fa fa-paper-plane mr-2"></i> Submit</button>
+        </div>
+    </div>
+    <!-- Modal Footer (optional) -->
+    <div class="mt-4 flex justify-end mt-10 pt-5 border-t">
+        <button onclick="$('.budgetModal').css('visibility', 'hidden')"
+            class="bg-gray-100 hover:bg-gray-200 w-[150px] text-[13px] text-gray-700 font-semibold py-2 px-4 rounded">
+            Close
+        </button>
+
+    </div>
+</div>
+</div>
+</div>
+
+
+    <script>
+
+var budId = 0
+    $('#projhead').html(client.makeSels(client.project, 'project head', 'id', 'name'))
+    $('#projhead').change(function(){
+        var id = $(this).val()
+        $('#projsub').html(client.makeSels(client.sub.filter(a=>a.pid == id), 'project sub', 'id', 'name')) 
+    })
+
+        function disBudget(){
+
+            if ($.fn.DataTable.isDataTable('#budgetTbl')) {
+                $('#budgetTbl').DataTable().clear().destroy();
+            }
+            
+            try {
+                
+        var count = 1
+        const dataTable = $('#budgetTbl').DataTable({
+            data: client.budget,
+            columns: [
+                { data: null, render: (data, type, row, meta) => count++ },
+                { data: null, render: (data, type, row, meta) => `${client.useWanted(client.dept, row.dept)?.name}` },
+                { data: null, render: (data, type, row, meta) => `${client.useWanted(client.coa, row.coa)?.name}` },
+                { data: null, render: (data, type, row, meta) => `${client.useWanted(client.prog, row.program)?.name.substring(0,40)}` },
+                { data: null, render: (data, type, row, meta) => `${client.format_amount(parseFloat(row.amount))}` },
+                { data: null, render: (data, type, row, meta) => `${row.toy.substring(0,40)}` },
+                {
+                    data: 'mode', render: (data, type, row, meta) => {
+                        return `<i onclick="viewBudget(this.title)" title="${row.id}" class="fa fa-eye mr-2"></i>`;
+                    }
+                },
+              
+            ],
+            paging: true,
+            pageLength: 10,
+            lengthMenu: [10, 25, 50, 100],
+            searching: true,
+            footerCallback: function (row, data, start, end, display) {
+                let totalAmount = data.reduce((total, item) => total + parseFloat(item['amount']), 0);
+                let formattedTotal = client.format_amount(totalAmount);
+                $(this.api().table().footer()).html(`<tfoot><tr><th colspan="4">Total:</th><th>${formattedTotal}</th><th colspan="2"></th></tr></tfoot>`);
+            }
+        });
+
+        } catch (error) {
+            console.error('An error occurred while initializing DataTable:', error.message);
+        } 
+
+        }
+
+        $('.tbody').html(client.loader())
+
+        setTimeout(function(){
+            disBudget()
+        },2000)
+        
+
+
+
+        $('#submitBudBtn').click(function(){
+        if($('#projname').val().length == 0 || $('#projdesc').val().length == 0 || $('#projamount').val().length == 0 || $('#projsub').val().length == 0){
+            client.ourAlert('Fill in all fields', 2)
+            return
+        }  
+        var data = {
+            budId:budId,
+            projname:$('#projname').val(),
+            projdesc:$('#projdesc').val(),
+            projamount:$('#projamount').val(),
+            projsub:$('#projsub').val()
+        }
+        client.postData(client.baseUrl+'/cash.php', data, (response)=>{
+            if(response.status == 200){
+                client.ourAlert('Successful', 1)
+                $('#projname').val(''),
+                $('#projdesc').val(''),
+                $('#projamount').val('  ')
+                $('.budgetModal').css('visibility', 'hidden')
+            }else{
+                client.ourAlert('Something went wrong', 2)
+            }
+        })
+    })
+
+ 
+    function viewBudget(id){
+    budId = id
+    $('.budgetModal').css('visibility', 'visible')
+    var res = client.budget.filter(a=>a.id == id)[0]
+    var out = `<div class="bg-white rounded-lg shadow-md p-4">
+                <h2 class="text-2xl font-semibold mb-4">Details</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex items-start">
+                        <div class="w-1/3 font-semibold">Amount:</div>
+                        <div class="w-2/3">${client.format_amount(parseFloat(res.amount))}</div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="w-1/3 font-semibold">COA:</div>
+                        <div class="w-2/3">${client.useWanted(client.coa, res.coa)?.name}</div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="w-1/3 font-semibold">Department:</div>
+                        <div class="w-2/3">${client.useWanted(client.dept, res.dept)?.name}</div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="w-1/3 font-semibold">Program:</div>
+                        <div class="w-2/3">${client.useWanted(client.prog, res.program)?.name.substring(0, 40)}</div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="w-1/3 font-semibold">Sub Program:</div>
+                        <div class="w-2/3">${res.subprogram}</div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="w-1/3 font-semibold">TOY:</div>
+                        <div class="w-2/3">${res.toy}</div>
+                    </div>
+                </div>
+            </div>
+                `;
+    var table = `
+    <table class="table-auto w-full border-collapse border border-gray-300 mt-4">
+        <thead class="bg-gray-200">
+            <tr>
+                <th class="px-4 py-2">Sno</th>
+                <th class="px-4 py-2">Head</th>
+                <th class="px-4 py-2">Sub</th>
+                <th class="px-4 py-2">Name</th>
+                <th class="px-4 py-2">Description</th>
+                <th class="px-4 py-2">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+    `;
+    $.getJSON(client.baseUrl + '/cash.php?proj=' + id, (response) => {
+        response.forEach((res, index) => {
+            table += `
+            <tr class="${index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}">
+                <td class="border px-4 py-2">${index + 1}</td>
+                <td class="border px-4 py-2">${client.useWanted(client.project ,client.sub.filter(a=>a.id == res.head)[0].pid)?.name}</td>
+                <td class="border px-4 py-2">${client.useWanted(client.sub, res.head)?.name}</td>
+                <td class="border px-4 py-2">${res.name}</td>
+                <td class="border px-4 py-2">${res.description}</td>
+                <td class="border px-4 py-2">${client.format_amount(parseFloat(res.amount))}</td>
+            </tr>
+            `;
+        });
+        const totalAmount = client.sumOfArray(response.map((res) => parseFloat(res.amount)));
+        table += `
+            </tbody>
+            <tfoot>
+            <tr class="bg-gray-200">
+                <th class="border px-4 py-2" colspan="5">Total</th>
+                <th class="border px-4 py-2">${client.format_amount(totalAmount)}</th>
+            </tr>
+            </tfoot>
+        </table>`;
+        $('#budDetails').html(out+table)
+    });
+}
+
+        
+    </script>
+
+

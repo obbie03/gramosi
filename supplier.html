@@ -1,0 +1,354 @@
+<div class="w-full flex items-center justify-start flex-col bg-white min-h-[400px] rounded-md mt-10 p-5">
+    <div class="flex w-full items-center justify-between border-b pb-4">
+        <div class="flex flex-col">
+            <h1 class="text-[25px] text-slate-800 font-bold">Suppliers</h1>
+            <span class="text-[12px] text-slate-700">All supplier Info</span>
+        </div>
+        <div class="flex items-center justify-end">
+            <div class="search flex items-center justify-center border rounded-md px-3 overflow-hidden">
+                <input type="text" class="search-field text-center w-[200px] h-[40px] outline-none text-[13px]"
+                    placeholder="Search supplier">
+                <i class="fa fa-search text-slate-400" aria-hidden="true"></i>
+            </div>
+            <button id="new-customer-btn"
+                onclick="$('#supModal').removeClass('hidden')"
+                class="flex btn bg-default text-white items-center justify-center border border-gray-300 h-[40px] px-3 ml-2 rounded-md text-[12px]">
+                <i class="fa fa-plus mr-2" aria-hidden="true"></i>
+                New Supplier
+            </button>
+        </div>
+    </div>
+
+    <div id="supTable">
+    </div>
+
+    <div id="supStatement" class="hidden">
+
+    </div>
+
+    
+</div>
+
+
+<!-- Modal Background -->
+<div id="supModal" method="post"
+    class="hidden supplier-modal new-customer-modal fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+    <!-- Modal Content -->
+    <div id="customer-form" submission_type="new-addition"
+        class="bg-white min-h-[60vh] rounded p-5 w-[60%] mx-20 shadow-lg overflow-y-auto relative">
+        <!-- submission-wrapper -->
+        <div
+            class="loader-cover hidden absolute w-full h-full bg-black/30 top-0 left-0 flex items-center justify-center">
+            <div
+                class="w-[400px] h-[300px] bg-white rounded-md shadow-defaults flex items-center justify-center flex-col">
+                <div class="submission-loader text-center">
+
+                    <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+                        role="status">
+                    </div>
+                </div>
+                <h4 class="text-black font-semibold text-[18px] mt-3 submission-text">Submitting</h4>
+            </div>
+        </div>
+        <!-- submission-wrapper -->
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center mb-4 border-b pb-5">
+            <h2 class="text-xl font-semibold form-title">Add New Supplier</h2>
+            <button
+            onclick="$('#supModal').addClass('hidden')"
+            class="close-customer-modal text-gray-500 hover:text-gray-700">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <!-- Modal Body -->
+        <div class="p-4 w-full grid grid-cols-2 gap-4">
+            <input id="id" type="hidden" placeholder="Code" class="border rounded p-2 w-full text-[12px]">
+            
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">Name *</label>
+                <input  id="name" type="text" placeholder="Supplier Name" class="border rounded p-2 w-full text-[12px]"
+                    required>
+            </div>
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">Contact Person *</label>
+                <input disabled id="person" type="text" placeholder="Contact Person"
+                    class="border rounded p-2 w-full text-[12px]">
+            </div>
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">Phone Number *</label>
+                <input disabled id="phonenumber" type="text" placeholder="Phone Number" class="border rounded p-2 w-full text-[12px]">
+            </div>
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">Email *</label>
+                <input disabled id="email" type="text" placeholder="Email"
+                    class="border rounded p-2 w-full text-[12px]" required>
+            </div>
+            
+            <div class="w-full">
+                <label for="" class="text-[12px] mb-3">Address *</label>
+                <input disabled id="address" type="text" placeholder="address" class="border rounded p-2 w-full text-[12px]">
+            </div>
+           
+            </div>
+            <!-- Modal Footer (optional) -->
+            <div class="mt-4 flex justify-end mt-10 pt-5 border-t col-span-2">
+                <button
+                onclick="$('#supModal').addClass('hidden')"
+                    class="close-customer-modal bg-gray-100 hover:bg-gray-200 w-[150px] text-[13px] text-gray-700 font-semibold py-2 px-4 rounded">
+                    Close
+                </button>
+                <button id="submit-supplier-btn" type="submit"
+                    class="bg-default hover:bg-default/90   w-[150px] text-[13px] text-white font-bold py-2 px-4 rounded mx-2"><i
+                        class="fa fa-paper-plane mr-2"></i>
+                    <span>Submit</span>
+                </button>
+            </div>
+        </div>
+</div>
+
+<div id="slidingDiv" class="bg-white fixed top-0 right-0 h-full w-1/4 overflow-hidden shadow-lg" style="display: none;">
+    <i onclick="$('#slidingDiv').animate({ width: 'toggle' }, 350)" class="fa fa-times p-1 m-1 fa-lg text-red-500 float-right"></i>
+    <h3 class="m-2 font-semibold text-lg supName"></h3>
+    <hr>
+    <input type="hidden" id="typu">
+    <div id="form"></div>
+</div>
+
+    
+
+
+<script>
+
+var sid = 0
+var nameTOsend = '';
+function addInv(id, name, type){
+        sid = id
+        nameTOsend=name
+        $('.supName').html(name)
+        var pay = `<div class="max-w-md mx-auto bg-white p-8 rounded">
+            <select id="budget" class="border rounded p-2 w-full mb-4"></select>
+            <select id="exType" class="border rounded p-2 w-full mb-4"></select>
+            <select id="cashBook" class="cashbook border rounded p-2 w-full mb-4"></select>
+            <select id="cashSof" class="border rounded p-2 w-full mb-4"></select>
+            <input id="chequeno" type="text" placeholder="cheque number" class="border rounded p-2 w-full mb-4">
+            <input id="Examount" type="text" placeholder="amount" class="border rounded p-2 w-full mb-4">
+            <textarea id="Exdesc" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"></textarea>
+            <div class="text-center">
+            <button onclick="subPay()" class="subInv mt-6 bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800">Submit</button>
+            </div>
+        </div>`
+        var inv = `<div class="max-w-md mx-auto bg-white p-8 rounded">
+            <label for="curr" class="block text-sm font-medium text-gray-600 mb-2">Type:</label>
+                    <select name="" id="invdev" class="border rounded p-2 w-full mb-4">
+                        <option value="1">Invoice</option>
+                        <option value="2">Debit note</option>
+                    </select>
+            <label for="curr" class="coa block text-sm font-medium text-gray-600 mb-2">Chart of account:</label>
+                    <select id="coa"></select>
+            <label for="amount" class="block mt-4 text-sm font-medium text-gray-600 mb-2">Amount:</label>
+                    <input type="number" id="amount" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500">
+            <label for="description" class="block mt-4 text-sm font-medium text-gray-600 mb-2">Description:</label>
+                    <textarea id="description" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"></textarea>
+            <div class="text-center">
+            <button onclick="subPay()" class="subInv mt-6 bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue active:bg-blue-800">Submit</button>
+            </div>
+        </div>`
+        $('#typu').val(type)
+        $('#form').html(type==2?pay:inv)
+        $('#slidingDiv').animate({ width: 'toggle' }, 350);
+
+        if(type == 1){
+            $('#coa').select2({
+        placeholder: 'Chart of account',
+        allowClear: true, 
+        data: client.coa.filter(a=>a.account[0] != 1).map(res => ({
+            id: res.id,
+            text: `${res.account}: ${res.name}`
+        }))
+    });
+        }else{
+            $('.cashbook').html(client.makeSels(client.banks, 'cashbook', 'id', 'name'))
+            $('#cashSof').html(client.makeSels(client.sof, 'source of fund', 'id', 'name'))
+            $('#budget').select2({
+        placeholder: 'Search for a budget',
+        allowClear: true, 
+        data: client.budget.map(res => ({
+            id: res.id,
+            text: `${res.subprogram}: ${client.useWanted(client.dept, res.dept)?.name}: ${client.useWanted(client.coa, res.coa)?.account}: ${res.toy}`
+        }))
+    });
+          
+    $('#budget').change(function(){
+            $.getJSON(client.baseUrl + '/cash.php?proj=' + $(this).val(), (response) => {
+                $('#exType').html(client.makeSels(response, 'project', 'id', 'name'))
+            })
+        })
+        }
+   
+    }
+
+   
+
+    // $('#coa').html(client.makeSels(client.coa, 'Chart of account', 'id', 'name'))
+
+   
+
+    function subPay(){
+
+        $('.subPay').prop('disabled', true)
+
+        if($('#typu').val() == 2){
+            fd = {
+                exType:$('#exType').val(),
+                Exbudget:$('#budget').val(),
+                Examount:$('#Examount').val(),
+                Exdesc:$('#Exdesc').val(),
+                Expaye:nameTOsend,
+                cashBook:$('#cashBook').val(),
+                chequeno:$('#chequeno').val(),
+                cashSof:$('#cashSof').val(),
+                sidNames:sid,
+                updatedBy:client.uid
+            }
+        }else{
+            var tipo = document.getElementById('invdev').value
+            var rec = document.getElementById('coa').value
+            var amu = document.getElementById('amount').value
+            var desc = document.getElementById('description').value
+        if(rec.length == 0|| amu.length == 0){
+            client.ourAlert('Please enter all fields', 2)
+                    $('.subInv').prop('disabled', false)
+                    return
+        }
+        var fd = {} 
+                fd = {
+                coa:rec,
+                sidT:sid,
+                amu:amu,
+                desc:desc,
+                nameTOsend:nameTOsend,
+                tipo:tipo
+            }
+        }
+
+        client.postData(`${client.baseUrl}/supplier.php`, fd, (response)=>{
+            if(response.status == 200){
+                        client.ourAlert('Successful', 1)
+                        $('#slidingDiv').animate({ width: 'toggle' }, 350)
+                        $.getJSON(`${client.baseUrl}/supplier.php?all`, (response)=>{
+                        $('#supTable').html(displaySup(response))
+                        allSup = [...response]
+    })
+                        
+                    }else{
+                        client.ourAlert('Something went wrong', 2)
+                    }
+                    $('.subInv').prop('disabled', false)
+        })
+
+
+    }
+
+    $('#submit-supplier-btn').click(function(e){
+        e.preventDefault()
+        $(this).prop('disabled', true)
+
+        if($('#name').val().length == 0){
+            client.ourAlert('Please fill in field', 2)
+            return
+        }
+        var data = {
+            name:$('#name').val()
+        }
+        client.postData(`${client.baseUrl}/supplier.php`, data, (response)=>{
+            console.log(response)
+            if(response.status == 200){
+                client.ourAlert('Successful', 1)
+            }else{
+                client.ourAlert('Something went wrong', 2)
+            }
+        })
+    })
+    var allSup = []
+    $.getJSON(`${client.baseUrl}/supplier.php?all`, (response)=>{
+        $('#supTable').html(displaySup(response))
+        allSup = [...response]
+    })
+
+
+    function displaySup(data){
+      var sids = [...new Set(data.map((res)=>res.ids))]
+        var out = `<table class="min-w-full border border-gray-300">
+                    <thead>
+                    <tr class="text-left bg-default text-white">
+                        <th class="border-b px-4 py-2">Sno</th>
+                        <th class="border-b px-4 py-2">Name</th>
+                        <th class="border-b px-4 py-2">Balance</th>
+                        <th class="border-b px-4 py-2">Actions</th>
+                    </tr>
+                </thead><tbody>
+                    `
+                    var count = 1
+                    sids.map((res)=>{
+                        var wan = data.filter(a=>a.ids == res)
+                        var credit = client.sumOfArray(wan.filter(a=>a.type == 1).map(ult=> parseFloat(ult.amount)))
+                        var debit = client.sumOfArray(wan.filter(a=>a.type == 2).map(ult=> parseFloat(ult.amount)))
+                        out += `<tr>
+                                <td class="border-b px-4 py-2">${count++}</td>
+                                <td class="border-b px-4 py-2">${wan[0].name}</td>
+                                <td class="border-b px-4 py-2">${client.format_amount(credit-debit)}</td>
+                                <td class="border-b px-4 py-2"> <i onclick="addInv('${res}', '${wan[0].name}', 2)" class="fa fa-money m-2"></i><i onclick="addInv('${res}', '${wan[0].name}', 1)" class="fa fa-credit-card m-2"></i> <i onclick="showState('${res}', '${wan[0].name}')" class="fa fa-arrow-right m-2"></i> </td>
+                                </tr>`
+                    })
+                    out += `</tbody></table>`
+                    return out
+    }
+
+    function backSup(){
+        $('#supStatement').hide()
+        $('#supTable').show()
+    }
+
+    function showState(id, name){
+            $('#supTable').hide()
+            var balance = 0.0
+            var out = `<i onclick="backSup()" class="fa fa-arrow-circle-left fa-2x mb-3"></i><br><div class="mb-4">
+                        <p class="text-lg font-semibold text-gray-600">Supplier Name: ${name}</p>
+                        </div>
+                      <table class="min-w-full border border-gray-300">
+                    <thead>
+                    <tr class="text-left bg-default text-white">
+                        <th class="border-b px-4 py-2">Date</th>
+                        <th class="border-b px-4 py-2">Invoice #</th>
+                        <th class="border-b px-4 py-2">Description</th>
+                        <th class="border-b px-4 py-2">Debit</th>
+                        <th class="border-b px-4 py-2">Credit</th>
+                        <th class="border-b px-4 py-2">Balance</th>
+                    </tr>
+                </thead><tbody>
+                    `
+                    allSup.filter(a=>a.ids == id).map((res)=>{
+
+                        if(res.sid == null){
+                            out += `<tr> <td colspan="6" class="border-b px-4 py-2 text-center">No activity</td> </tr>`
+                        }else{
+                            res.type == 1?balance += parseFloat(res.amount):0
+                            res.type == 2?balance -= parseFloat(res.amount):0
+                            out += `<tr>
+                            <td class="border-b px-4 py-2">${res.date.substring(0,10)}</td>
+                            <td class="border-b px-4 py-2">${res.invoice}</td>
+                            <td class="border-b px-4 py-2">${res.comment}</td>
+                            <td class="border-b px-4 py-2">${res.type == 2?client.format_amount(res.amount):0}</td>
+                            <td class="border-b px-4 py-2">${res.type == 1?client.format_amount(res.amount):0}</td>
+                            <td class="border-b px-4 py-2">${client.format_amount(balance)}</td>
+                            </tr>`
+                        }
+                    })
+                    out += `</tbody></table>`
+                    $('#supStatement').html(out)
+                    $('#supStatement').show(out)
+    }
+
+</script>

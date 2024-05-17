@@ -1,0 +1,155 @@
+<div class="w-full min-h-[500px] h-full  rounded-md p-3">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Balance Sheet</h1>
+        <table id="balance-sheet" class="w-full g-table">
+            <thead class="bg-default text-white">
+                <tr>
+                    <th>Assets</th>
+                    <th>Amount</th>
+                    <th>Liabilities & Equity</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th>Total Assets</th>
+                    <th id="total-assets"></th>
+                    <th>Total Liabilities & Equity</th>
+                    <th id="total-liabilities-equity"></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+
+</div>
+
+
+<script>
+
+    console.log(client.allRepoData)
+    function displayBalanceSheet() {
+        let totalAssets = 0;
+        let totalLiabilitiesEquity = 0;
+
+        // Clear previous data
+        $('#balance-sheet tbody').empty();
+
+       
+       
+        $('#balance-sheet tbody').append(`<tr class="bg-gray-500"><td>Fixed Assets</td><td></td><td></td><td></td></tr>`);
+        client.allRepoData.supplier.filter(a=>a.type == 1).map((res)=>{
+            if(client.coa.filter(b=>b.id == res.coa)[0].account.substring(0,2) == 31){
+            var fromcoa = client.sumOfArray(client.allRepoData.journal.filter(a=>a.from_coa == res.coa).map(res=>parseFloat(res.amount)))
+            var tocoa = client.sumOfArray(client.allRepoData.journal.filter(a=>a.to_coa == res.coa).map(res=>parseFloat(res.amount)))
+                $('#balance-sheet tbody').append(`
+                <tr>
+                    <td>${client.coa.filter(b=>b.id == res.coa)[0].name}</td>
+                    <td>${parseFloat(res.amount) - fromcoa + tocoa}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            `);
+            totalAssets += (parseFloat(res.amount) - fromcoa + tocoa);
+            }          
+        })
+
+        client.allRepoData.journal.map((res)=>{
+                if(!client.allRepoData.supplier.filter(a=>a.type == 1).includes(res.to_coa)){
+                    if(client.coa.filter(b=>b.id == res.to_coa)[0].account.substring(0,2) == 31){
+                $('#balance-sheet tbody').append(`
+                <tr>
+                    <td>${client.coa.filter(b=>b.id == res.to_coa)[0].name}</td>
+                    <td>${parseFloat(res.amount)}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            `);
+            totalAssets += (parseFloat(res.amount) );
+                }
+            }
+           })
+        
+        $('#balance-sheet tbody').append(`<tr class="bg-gray-500"><td>Current Assets</td><td></td><td></td><td></td></tr>
+            `);
+
+            client.allRepoData.supplier.filter(a=>a.type == 1).map((res)=>{
+                if(client.coa.filter(b=>b.id == res.coa)[0].account.substring(0,2) == 32){
+                var fromcoa = client.sumOfArray(client.allRepoData.journal.filter(a=>a.from_coa == res.coa).map(res=>parseFloat(res.amount)))
+                var tocoa = client.sumOfArray(client.allRepoData.journal.filter(a=>a.to_coa == res.coa).map(res=>parseFloat(res.amount)))
+                $('#balance-sheet tbody').append(`
+                <tr>
+                    <td>${client.coa.filter(b=>b.id == res.coa)[0].name}</td>
+                    <td>${parseFloat(res.amount) - fromcoa + tocoa}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            `);
+            totalAssets += (parseFloat(res.amount) - fromcoa + tocoa);      
+                }   
+        })
+        client.allRepoData.journal.map((res)=>{
+                if(!client.allRepoData.supplier.filter(a=>a.type == 1).includes(res.to_coa)){
+                    if(client.coa.filter(b=>b.id == res.to_coa)[0].account.substring(0,2) == 32){
+                $('#balance-sheet tbody').append(`
+                <tr>
+                    <td>${client.coa.filter(b=>b.id == res.to_coa)[0].name}</td>
+                    <td>${parseFloat(res.amount)}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            `);
+            totalAssets += (parseFloat(res.amount) );
+                }
+            }
+           })
+
+            $('#balance-sheet tbody').append(`
+                <tr>
+                    <td>Cash</td>
+                    <td>${parseFloat(client.allRepoData.cash[0].difference)}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            `);
+            totalAssets += parseFloat(parseFloat(client.allRepoData.cash[0].difference));
+    ///////////////////////////////////now we do liabilities////////////////////////////////////////
+
+
+    var totalCred = client.sumOfArray(client.allRepoData.supplier.filter(a=>a.type == 1)
+    .map(res=>parseFloat(res.amount))) -
+     client.sumOfArray(client.allRepoData.supplier.filter(a=>a.type == 2)
+     .map(res=>parseFloat(res.amount)))
+
+            $('#balance-sheet tbody').append(`
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Creditors Control Account</td>
+                    <td>${totalCred}</td>
+                </tr>
+            `);
+            totalLiabilitiesEquity += totalCred;
+        $('#total-assets').text(totalAssets);
+        $('#total-liabilities-equity').text(totalLiabilitiesEquity);
+    }
+
+    var assetData = [
+        { name: "Cash", amount: 5000 },
+        { name: "Accounts Receivable", amount: 3000 },
+        { name: "Inventory", amount: 2000 },
+    
+    ];
+
+    var liabilitiesEquityData = [
+        { name: "Accounts Payable", amount: 2000 },
+        { name: "Loan Payable", amount: 4000 },
+        { name: "Owner's Equity", amount: 7000 },
+    ];
+
+    $(document).ready(function() {
+        displayBalanceSheet();
+    });
+</script>

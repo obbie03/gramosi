@@ -1,0 +1,179 @@
+<div class="w-full ">
+    <div class="flex w-full items-center justify-between border-b pb-4">
+        <div class="flex flex-col">
+            <h4 class="text-[20px] text-slate-800 font-bold">Cash</h4>
+        </div>
+        <div class="flex items-center justify-end">
+            <label for="from" class="text-[13px] text-slate-600 mr-2">From</label>
+            <input type="date" id="from"
+                class="w-[220px] from-date border rounded-md  text-slate-700 px-3 h-[40px] outline-none text-[12px]"
+                placeholder="From">
+            <label class="text-[12px] text-slate-600 mx-2">To</label>
+            <input type="date" id="to"
+                class="w-[220px] to-date rounded-md mr-2 text-slate-700 border px-2 h-[40px] outline-none text-[12px]"
+                placeholder="To">
+            
+            <div class="search flex items-center justify-center border rounded-md px-3 overflow-hidden">
+                <input type="text" class="search-field text-center w-[220px] h-[40px] outline-none text-[12px]"
+                    placeholder="Search Content">
+                <i class="fa fa-search text-slate-400" aria-hidden="true"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full gl-table table mt-5 text-[13px] bg-slate-50 rounded-b-md" title="General Ledger">
+        <div
+            class="w-full table-head tr grid grid-cols-17 h-[40px] bg-default text-white rounded-t-md overflow-hidden text-[13px] gap-x-4 font-semibold">
+            <div col="Description" class="th flex items-center h-full w-full col-span-1 border-r pl-2">Code</div>
+            <div col="Description" class="th flex items-center h-full w-full col-span-3 border-r pl-2">Name</div>
+            <div col="Budget" class="th flex items-center h-full w-full col-span-2  border-r ">Budget</div>
+            <div col="Flexed Budget" class="th flex items-center h-full w-full col-span-2  border-r">Flexed Budget</div>
+            <div col="Actual Performance" class="th flex items-center h-full w-full col-span-2  border-r">Actual Performance</div>
+            <div col="Actual Performance" class="th flex items-center h-full w-full col-span-2  border-r">Actual To Date</div>
+            <div col="Flexed Performance %" class="th flex items-center h-full w-full col-span-2  border-r">Flexed Performance %</div>
+            <div col="Budget Less Actual" class="th flex items-center h-full w-full col-span-2  border-r">Budget Less Actual</div>
+            <div col="Budgeted vs Actual %" class="th flex items-center h-full w-full col-span-1  border-r pr-2">Budgeted vs Actual %</div>
+        </div>
+        <div
+            class=" tbody randp_rows w-full mt-1 max-h-[400px] pb-3 overflow-hidden overflow-y-auto text-[12px]">
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+var accountCodesAndNames = [
+  { id: "151", name: "LOCAL TAXES" },
+  { id: "152", name: "FEES AND CHARGES" },
+  { id: "153", name: "LICENCES" },
+  { id: "154", name: "LEVIES" },
+  { id: "155", name: "PERMITS" },
+  { id: "156", name: "CHARGES" },
+  { id: "157", name: "OTHER INCOMES" },
+  { id: "158", name: "NATIONAL SUPPORT (GRANTS)" },
+  { id: "159", name: "DONOR SUPPORT" },
+  { id: "211", name: "Salaries" },
+  { id: "212", name: "Wages" },
+  { id: "213", name: "Allowances" },
+  { id: "214", name: "Emolument Expenses" },
+  { id: "221", name: "Office Costs" },
+  { id: "222", name: "Building, Repair and Maintenance Costs" },
+  { id: "223", name: "Plant, Machinery, Vehicle Running and Maintenance Costs" },
+  { id: "224", name: "Other Administrative Operating Costs" },
+  { id: "225", name: "Requisites" },
+  { id: "226", name: "Services" },
+  { id: "227", name: "Travel Expenses" },
+  { id: "228", name: "Training" },
+  { id: "229", name: "Legal Costs" },
+  { id: "231", name: "Depreciation on Own Assets" },
+  { id: "232", name: "Depreciation on Leased Property (Finance Lease)" },
+  { id: "241", name: "Interest on Domestic Debt" },
+  { id: "242", name: "Interest on External Debt" },
+  { id: "243", name: "Financial Charges" },
+  { id: "244", name: "Settlement of Outstanding Bills - Financial Charges" },
+  { id: "249", name: "Other Financial Charges" },
+  { id: "251", name: "Social Assistance Benefits" },
+  { id: "261", name: "Grants to Grant-aided Institutions" },
+  { id: "262", name: "Grants to Non-Governmental Organisations" },
+  { id: "263", name: "Grants to Households" },
+  { id: "264", name: "Grants to Institutional Revolving Funds" },
+  { id: "265", name: "Other Grants" },
+  { id: "267", name: "Other Payments" },
+  { id: "271", name: "Subsidies to Non-Financial Enterprises" },
+  { id: "272", name: "Subsidies to Financial Institutions" },
+  { id: "273", name: "Subsidies to Private Enterprises" },
+  { id: "274", name: "Other Subsidies" },
+  { id: "281", name: "Legal Expenses" },
+  { id: "291", name: "Constitutional Expenditure" },
+  { id: "292", name: "Other Constitutional Expenditure" },
+  { id: "293", name: "Allowances" },
+  { id: "294", name: "Statutory Expenditure" },
+  { id: "295", name: "Other Expenses" },
+  { id: "311", name: "Fixed Assets" },
+  { id: "312", name: "Stocks (Inventories)" },
+  { id: "313", name: "Valuables" },
+  { id: "314", name: "Non-Produced Assets" },
+  { id: "320", name: "Long Term Investments" },
+  { id: "321", name: "Debtors" },
+  { id: "322", name: "Staff Debtors" },
+  { id: "323", name: "Prepayments" },
+  { id: "324", name: "VAT refunds" },
+  { id: "325", name: "Foreign Debtors" },
+  { id: "326", name: "Cash and Cash Equivalents" },
+  { id: "411", name: "Creditors" },
+  { id: "421", name: "Creditors" },
+  { id: "520", name: "Current Year Surplus/(Deficit)" },
+  { id: "530", name: "Reserves" },
+  { id: "611", name: "Realised Gains/Losses" },
+  { id: "621", name: "Unrealised Gains/Losses" },
+  { id: "631", name: "Miscellaneous" },
+  { id: "510", name: "Owners Fund" }
+];
+
+    $.getJSON(`${client.baseUrl}/reports.php?randp`, (response)=>{
+        // console.log(response.cash)
+        var out = ``
+        var accounts = client.makeUniq(response.budget.map(res=>res.account))
+        var months  = 1
+        accountCodesAndNames.map((ult)=>{
+            var totalOfbudget = 0
+            var totalOfFlexed = 0
+            var totalOfActual = 0
+            var totalOfaToDate = 0
+            var totalOfflexper = 0
+            var totalOfdifferene = 0
+            var totalOfbugper = 0
+            accounts.filter(a=>a.substring(0,3) == ult.id).map((res)=>{
+                var wan = response.budget.filter(a=>a.account == res)
+        var totalBudget = client.sumOfArray(wan.map((res)=>parseFloat(res.amount)))
+        var flexed = (months/12) * totalBudget
+        var coa = client.coa.filter(a=>a.account == res)[0].id
+        var actual = client.sumOfArray(response.cash.filter(a=>a.coa == coa).map(res=>parseFloat(res.amount)))
+        out += `<div
+            class="w-full table-head tr grid grid-cols-17 h-[40px] overflow-hidden text-[13px] gap-x-4 font-semibold">
+            <div col="Description" class="th flex items-center h-full w-full col-span-1 border-r pl-2">${res}</div>
+            <div col="Description" class="th flex items-center h-full w-full col-span-3 border-r pl-2">${wan[0].name}</div>
+            <div col="Budget" class="th flex items-center h-full w-full col-span-2  border-r ">${client.format_amount(totalBudget)}</div>
+            <div col="Flexed Budget" class="th flex items-center h-full w-full col-span-2  border-r">${client.format_amount(flexed)}</div>
+            <div col="Actual Performance" class="th flex items-center h-full w-full col-span-2  border-r">${client.format_amount(actual)}</div>
+            <div col="Actual Performance" class="th flex items-center h-full w-full col-span-2  border-r">${client.format_amount(actual)}</div>
+            <div col="Flexed Performance %" class="th flex items-center h-full w-full col-span-2  border-r">${((actual/flexed)*100).toFixed()} %</div>
+            <div col="Budget Less Actual" class="th flex items-center h-full w-full col-span-2  border-r">${client.format_amount(totalBudget - actual)}</div>
+            <div col="Budgeted vs Actual %" class="th flex items-center h-full w-full col-span-1  border-r pr-2">${((actual/totalBudget)*100).toFixed()} %</div>
+        </div>`
+
+            totalOfbudget += totalBudget
+            totalOfFlexed += flexed
+            totalOfActual += actual
+            totalOfaToDate += actual
+            totalOfflexper += (actual/flexed)*100
+            totalOfdifferene += totalBudget - actual
+            totalOfbugper += (actual/totalBudget)*100
+
+            })
+
+            out += `<div
+            class="w-full table-head tr grid bg-gray-500 grid-cols-17 h-[40px] overflow-hidden text-[13px] gap-x-4 font-semibold">
+            <div col="Description" class="th flex items-center h-full w-full col-span-1 border-r pl-2">${ult.id}</div>
+            <div col="Description" class="th flex items-center h-full w-full col-span-3 border-r pl-2">${ult.name}</div>
+            <div col="Budget" class="th flex items-center h-full w-full col-span-2  border-r ">${client.format_amount(totalOfbudget)}</div>
+            <div col="Flexed Budget" class="th flex items-center h-full w-full col-span-2  border-r">${client.format_amount(totalOfFlexed)}</div>
+            <div col="Actual Performance" class="th flex items-center h-full w-full col-span-2  border-r">${client.format_amount(totalOfActual)}</div>
+            <div col="Actual Performance" class="th flex items-center h-full w-full col-span-2  border-r">${client.format_amount(totalOfaToDate)}</div>
+            <div col="Flexed Performance %" class="th flex items-center h-full w-full col-span-2  border-r">${(totalOfflexper).toFixed()} %</div>
+            <div col="Budget Less Actual" class="th flex items-center h-full w-full col-span-2  border-r">${client.format_amount(totalOfdifferene)}</div>
+            <div col="Budgeted vs Actual %" class="th flex items-center h-full w-full col-span-1  border-r pr-2">${(totalOfbugper).toFixed()} %</div>
+        </div>`
+        })
+        // accounts.sort().map((res)=>{
+       
+        // })
+        $('.randp_rows').html(out)
+    })
+
+
+
+// console.log(accountCodesAndNames);
+
+</script>
