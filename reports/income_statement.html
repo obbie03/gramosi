@@ -51,7 +51,7 @@ function displayDetailedIncomeStatement(data) {
                 $('#detailed-income-statement tbody').append(`
                     <tr>
                         <td>${item.name}</td>
-                        <td>${item.amount}</td>
+                        <td>${client.format_amount(item.amount)}</td>
                     </tr>
                 `);
                 if (item.type === 'revenue') {
@@ -64,7 +64,7 @@ function displayDetailedIncomeStatement(data) {
             $('#detailed-income-statement tbody').append(`
                     <tr class="bg-default text-white">
                         <td>Total</td>
-                        <td>${totalRevenue.toFixed(2)}</td>
+                        <td>${client.format_amount(totalRevenue.toFixed(2))}</td>
                     </tr>
                 `);
 
@@ -79,7 +79,7 @@ function displayDetailedIncomeStatement(data) {
                 $('#detailed-income-statement tbody').append(`
                     <tr>
                         <td>${item.name}</td>
-                        <td>${item.amount}</td>
+                        <td>${client.format_amount(item.amount)}</td>
                     </tr>
                 `);
                 if (item.type === 'revenue') {
@@ -92,7 +92,7 @@ function displayDetailedIncomeStatement(data) {
             $('#detailed-income-statement tbody').append(`
                     <tr class="bg-default text-white">
                         <td>Total</td>
-                        <td>${totalExpenses}</td>
+                        <td>${client.format_amount(totalExpenses)}</td>
                     </tr>
                 `);
 
@@ -100,9 +100,9 @@ function displayDetailedIncomeStatement(data) {
             totalGrossProfit = totalRevenue - totalExpenses;
 
             // Display totals
-            $('#total-revenue').text(totalRevenue.toFixed(2));
-            $('#total-expenses').text(totalExpenses.toFixed(2));
-            $('#net-income').text(totalGrossProfit.toFixed(2)); // For simplicity, assuming net income is equal to gross profit
+            $('#total-revenue').text(client.format_amount(totalRevenue.toFixed(2)));
+            $('#total-expenses').text(client.format_amount(totalExpenses.toFixed(2)));
+            $('#net-income').text(client.format_amount(totalGrossProfit.toFixed(2))); // For simplicity, assuming net income is equal to gross profit
         }
 
     

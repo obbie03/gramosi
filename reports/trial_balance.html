@@ -136,16 +136,16 @@ var trialBalanceData = []
                     <tr>
                         <td>${account.code}</td>
                         <td>${account.desc}</td>
-                        <td>${account.debit}</td>
-                        <td>${account.credit}</td>
+                        <td>${client.format_amount(account.debit)}</td>
+                        <td>${client.format_amount(account.credit)}</td>
                     </tr>
                 `);
                 totalDebit += account.debit;
                 totalCredit += account.credit;
             });
 
-            $('#total-debit').text(totalDebit);
-            $('#total-credit').text(totalCredit);
+            $('#total-debit').text(client.format_amount(totalDebit));
+            $('#total-credit').text(client.format_amount(totalCredit));
 
             const balanceStatus = totalDebit === totalCredit ? "Balanced" : "Not Balanced";
             $('#balance-status').text(`Trial Balance is ${balanceStatus}`).toggleClass('text-green-500', totalDebit === totalCredit);

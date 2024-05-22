@@ -47,7 +47,7 @@
                 $('#balance-sheet tbody').append(`
                 <tr>
                     <td>${client.coa.filter(b=>b.id == res.coa)[0].name}</td>
-                    <td>${parseFloat(res.amount) - fromcoa + tocoa}</td>
+                    <td>${client.format_amount(parseFloat(res.amount) - fromcoa + tocoa)}</td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -62,7 +62,7 @@
                 $('#balance-sheet tbody').append(`
                 <tr>
                     <td>${client.coa.filter(b=>b.id == res.to_coa)[0].name}</td>
-                    <td>${parseFloat(res.amount)}</td>
+                    <td>${client.format_amount(parseFloat(res.amount))}</td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -82,7 +82,7 @@
                 $('#balance-sheet tbody').append(`
                 <tr>
                     <td>${client.coa.filter(b=>b.id == res.coa)[0].name}</td>
-                    <td>${parseFloat(res.amount) - fromcoa + tocoa}</td>
+                    <td>${client.format_amount(parseFloat(res.amount) - fromcoa + tocoa)}</td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -96,7 +96,7 @@
                 $('#balance-sheet tbody').append(`
                 <tr>
                     <td>${client.coa.filter(b=>b.id == res.to_coa)[0].name}</td>
-                    <td>${parseFloat(res.amount)}</td>
+                    <td>${client.format_amount(parseFloat(res.amount))}</td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -109,7 +109,7 @@
             $('#balance-sheet tbody').append(`
                 <tr>
                     <td>Cash</td>
-                    <td>${parseFloat(client.allRepoData.cash[0].difference)}</td>
+                    <td>${(parseFloat(client.allRepoData.cash[0].difference))}</td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -128,12 +128,12 @@
                     <td></td>
                     <td></td>
                     <td>Creditors Control Account</td>
-                    <td>${totalCred}</td>
+                    <td>${client.format_amount(totalCred)}</td>
                 </tr>
             `);
             totalLiabilitiesEquity += totalCred;
-        $('#total-assets').text(totalAssets);
-        $('#total-liabilities-equity').text(totalLiabilitiesEquity);
+        $('#total-assets').text(client.format_amount(totalAssets));
+        $('#total-liabilities-equity').text(client.format_amount(totalLiabilitiesEquity));
     }
 
     var assetData = [
